@@ -28,6 +28,7 @@
                         single-line
                         hide-details
                         class="ml-12"
+                        clearable
                     />
                     <v-spacer />
                     <v-dialog v-model="dialog" max-width="500px">
@@ -340,7 +341,7 @@ export default {
                                     e.response.data.errors.code[0],
                                     {
                                         timeout: 10000,
-                                        icon: 'done_outline',
+                                        icon: 'error_outline',
                                         dismissable: false,
                                         showClose: true
                                     }
@@ -403,7 +404,7 @@ export default {
                             );
                             this.$toast.error(e.response.data.errors.code[0], {
                                 timeout: 10000,
-                                icon: 'done_outline',
+                                icon: 'error_outline',
                                 dismissable: false,
                                 showClose: true
                             });
@@ -451,7 +452,7 @@ export default {
                         .catch(e => {
                             this.$toast.error(e.response.data.errors.code[0], {
                                 timeout: 10000,
-                                icon: 'done_outline',
+                                icon: 'error_outline',
                                 dismissable: false,
                                 showClose: true
                             });

@@ -6,8 +6,6 @@ use App\Http\Requests\Admin\Languages\ValidateRequest;
 use App\Http\Resources\Language as LanguageResource;
 use App\Models\Language;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Lang;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class LanguageController extends Controller
 {
@@ -42,12 +40,12 @@ class LanguageController extends Controller
 
     public function destroy(Language $language)
     {
-        $language->delete();
+        try {
+            $language->delete();
+        } catch (\Exception $e) {
+        }
 
         return response()->json(null, 204);
-//        return response()->json([
-//            'message' => Lang::get('messages.language_deleted')],
-//            204);
     }
 
     public function actives()

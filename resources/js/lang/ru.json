@@ -70,9 +70,14 @@
     "you_wont_revert": "Это необратимое действие",
     "yes_delete_it": "Да, удалить этот элемент!",
     "deleted": "Удаляется!",
-    "has_been_deleted": "Ваш файл был удален.",
+    "has_been_deleted": "Ваша запись была удалена.",
     "success": "успешно",
     "title": "Название",
     "new_status": "Добавить Статус",
-    "edit_status": "Изменить Статус"
+    "edit_status": "Изменить Статус",
+    "title_is_required": "Название обязательно",
+    "title_must_be_greater_than_3_characters": "Название должно быть больше 3 символов",
+    "title_must_be_less_than_20_characters": "должно быть не более 20 символов",
+    "status_add_successfully": "Статус успешно добавлен",
+    "status_successfully_updated": "Статус успешно обновлен"
 }

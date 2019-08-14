@@ -58,13 +58,11 @@ class Language extends Model
 
     public function editLanguage($request, $language)
     {
-        $id = $language->id;
-        $language = self::find($id);
         $language->fill($request->all());
         $language->is_active = $request->get('is_active');
         $language->update($request->all());
 
-        return self::find($id);
+        return $language;
     }
 
     public function removeLanguage($id): void

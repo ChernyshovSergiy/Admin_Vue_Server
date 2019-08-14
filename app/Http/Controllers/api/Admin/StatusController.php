@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\Admin;
 
+use App\Http\Requests\Admin\Statuses\ValidateRequest;
 use App\Models\Status;
 use App\Services\JsonService;
 use App\Services\LanguagesService;
@@ -30,23 +31,30 @@ class StatusController extends Controller
         return StatusResource::collection($this->model->getStatusNameByLang($cLang));
     }
 
-    public function store(Request $request)
+    public function store(ValidateRequest $request): StatusResource
     {
-        //
+        $status = $this->model->addNewStatus($request->all());
+
+        return new StatusResource($status);
     }
 
-    public function show(Status $status)
+    public function show(Status $status): StatusResource
     {
-        //
+        return new StatusResource($this->model->getStatus($status));
     }
 
-    public function update(Request $request, Status $status)
+    public function update(ValidateRequest $request, Status $status): StatusResource
     {
-        //
+        return new StatusResource($this->model->editStatus($request->all(), $status));
     }
 
     public function destroy(Status $status)
     {
-        //
+        try {
+            $status->delete();
+        } catch (\Exception $e) {
+        }
+
+        return response()->json(null, 204);
     }
 }

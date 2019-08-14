@@ -70,9 +70,14 @@
     "you_wont_revert": "You won't be able to revert this!",
     "yes_delete_it": "Yes, delete it!",
     "deleted": "Deleted!",
-    "has_been_deleted": "Your file has been deleted.",
+    "has_been_deleted": "Your item has been deleted.",
     "success": "success",
     "title": "Title",
     "new_status": "Add New Status",
-    "edit_status": "Edit Status"
+    "edit_status": "Edit Status",
+    "title_is_required": "Title is required",
+    "title_must_be_greater_than_3_characters": "Title must be greater than 3 characters",
+    "title_must_be_less_than_20_characters": "Title must be less than 20 characters",
+    "status_add_successfully": "Status add successfully",
+    "status_successfully_updated": "Status successfully updated"
 }

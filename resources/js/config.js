@@ -80,6 +80,9 @@ export const api = Object.assign(new URL(apiUrl), {
         url: 'languages'
     },
 
+    statuses: {
+        url: 'statuses'
+    },
     status: {
         url: 'status'
     },

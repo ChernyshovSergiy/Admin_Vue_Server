@@ -29,10 +29,8 @@ Route::prefix('v1')->group(function () {
         Route::put('profile', 'ProfileController@update');
         Route::apiResource('language', 'Admin\LanguageController');
         Route::get('languages', 'Admin\LanguageController@actives');
-        Route::get('status/{cLang}', 'Admin\StatusController@index');
-        Route::apiResource('status', 'Admin\StatusController')->except([
-            'index', 'show'
-        ]);
+        Route::get('statuses/{cLang}', 'Admin\StatusController@index');
+        Route::apiResource('status', 'Admin\StatusController')->except(['index']);
     });
 
 //    // Site
