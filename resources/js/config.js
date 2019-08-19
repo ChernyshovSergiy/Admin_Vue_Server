@@ -83,8 +83,16 @@ export const api = Object.assign(new URL(apiUrl), {
     statuses: {
         url: 'statuses'
     },
+
     status: {
         url: 'status'
+    },
+
+    contents: {
+        url: 'contents'
+    },
+    content: {
+        url: 'content'
     },
 
 });

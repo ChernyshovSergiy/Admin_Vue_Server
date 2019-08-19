@@ -31,6 +31,9 @@ Route::prefix('v1')->group(function () {
         Route::get('languages', 'Admin\LanguageController@actives');
         Route::get('statuses/{cLang}', 'Admin\StatusController@index');
         Route::apiResource('status', 'Admin\StatusController')->except(['index']);
+        Route::get('contents/{cLang}', 'Admin\ContentController@index');
+        Route::apiResource('content', 'Admin\ContentController')->except(['index']);
+
     });
 
 //    // Site

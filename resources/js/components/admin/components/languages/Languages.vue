@@ -366,7 +366,9 @@ export default {
             if (this.editedIndex > -1 && this.trigger === false) {
                 const payload = Object.assign({}, this.editedItem);
                 if (typeof payload.is_active === 'object') {
-                    payload.is_active = payload.is_active.id;
+                    payload.is_active = this.editedItem.is_active.id;
+                }else {
+                    payload.is_active = this.editedItem.is_active;
                 }
                 const cLang = this.$i18n.locale;
                 try {

@@ -4,28 +4,18 @@ namespace App\Http\Controllers\api\Admin;
 
 use App\Http\Requests\Admin\Statuses\ValidateRequest;
 use App\Models\Status;
-use App\Services\JsonService;
-use App\Services\LanguagesService;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Status as StatusResource;
 
 class StatusController extends Controller
 {
     public $model;
-    public $json;
-    public $languages;
 
-    public function __construct(
-        Status $status,
-        JsonService $jsonService,
-        LanguagesService $languagesService
-    )
+    public function __construct( Status $status )
     {
         $this->model = $status;
-        $this->json = $jsonService;
-        $this->languages = $languagesService;
     }
+
     public function index($cLang): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         return StatusResource::collection($this->model->getStatusNameByLang($cLang));
@@ -33,9 +23,7 @@ class StatusController extends Controller
 
     public function store(ValidateRequest $request): StatusResource
     {
-        $status = $this->model->addNewStatus($request->all());
-
-        return new StatusResource($status);
+        return new StatusResource($this->model->addNewStatus($request->all()));
     }
 
     public function show(Status $status): StatusResource

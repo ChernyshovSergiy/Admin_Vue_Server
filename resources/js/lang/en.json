@@ -79,5 +79,13 @@
     "title_must_be_greater_than_3_characters": "Title must be greater than 3 characters",
     "title_must_be_less_than_20_characters": "Title must be less than 20 characters",
     "status_add_successfully": "Status add successfully",
-    "status_successfully_updated": "Status successfully updated"
+    "status_successfully_updated": "Status successfully updated",
+
+    "content": "Content",
+    "headline": "Headline",
+    "sub_headline": "Sub Headline",
+    "text": "Text",
+    "content_successfully_updated": "Content Successfully Updated",
+    "new_content": "Add New Content",
+    "edit_content": "Edit Content"
 }

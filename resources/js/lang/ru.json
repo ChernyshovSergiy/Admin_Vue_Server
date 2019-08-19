@@ -79,5 +79,13 @@
     "title_must_be_greater_than_3_characters": "Название должно быть больше 3 символов",
     "title_must_be_less_than_20_characters": "должно быть не более 20 символов",
     "status_add_successfully": "Статус успешно добавлен",
-    "status_successfully_updated": "Статус успешно обновлен"
+    "status_successfully_updated": "Статус успешно обновлен",
+
+    "content": "Контент",
+    "headline": "Заглавие",
+    "sub_headline": "Подзаголовок",
+    "text": "Текст",
+    "content_successfully_updated": "Контент успешно обновлен",
+    "new_content": "Добавить Контент",
+    "edit_content": "Изменить Контент"
 }

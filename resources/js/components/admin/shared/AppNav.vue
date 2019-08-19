@@ -205,6 +205,14 @@ export default {
                 ],
                 [
                     {
+                        title: 'content',
+                        icon: 'ballot',
+                        to: { name: 'contents' },
+                        exact: false
+                    }
+                ],
+                [
+                    {
                         title: 'components',
                         icon: 'bubble_chart',
                         model: true,

@@ -37,6 +37,52 @@ trait BuildJson
      * @param $key
      * @return array
      */
+    public function buildOneShowAdmin($model, $column, $key) :array
+    {
+        $contents = $this->build($model, $column)->flatten()->keyBy($key);
+        $this->model = $model;
+        if (!$contents){
+            return [];
+        }
+        $text_blocks = $this->model->getTextColumnsForTranslate();
+        $text = array();
+        $lang = array();
+        foreach($contents as $i => $title)
+        {
+            $titleAr = json_decode(json_encode($title), true);
+            $filtered = Arr::except($titleAr, [$column]);
+            foreach ($text_blocks as $k => $block ){
+                $lang[$block] = Arr::get($titleAr, 'content.'.$block);
+            }
+            $text = Arr::add($text, $i, array_merge($filtered, $lang));
+
+        }
+        return $text;
+    }
+
+    public function buildOneLangAdmin($model, $column, $language) :array
+    {
+        $contents = $this->build($model, $column);
+        $this->language = $language;
+        $this->model = $model;
+        if (!$contents){
+            return [];
+        }
+        $text_blocks = $this->model->getTextColumnsForTranslate();
+        $text = array();
+        $lang = array();
+        foreach($contents as $i => $title)
+        {
+            $titleAr = json_decode(json_encode($title), true);
+            $filtered = Arr::except($titleAr, [$column]);
+            foreach ($text_blocks as $k => $block ){
+                $lang[$block] = Arr::get($titleAr, 'content.'.$block.'.'.$language);
+            }
+            $text = Arr::add($text, $i, array_merge($filtered, $lang));
+        }
+        return $text;
+    }
+
     public function buildOneLang($model, $column, $language, $key) :array
     {
         $contents = $this->build($model, $column)->flatten()->keyBy($key);

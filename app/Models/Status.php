@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Methods\BuildJson;
+use App\Traits\Methods\LanguagesFilter;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Status extends Model
 {
-    use BuildJson;
+    use BuildJson, LanguagesFilter;
 
     protected $fillable = [
         'title'
@@ -37,7 +38,7 @@ class Status extends Model
 
     public function getStatusNameByLang($cLang)
     {
-        $active_lang = Language::all()->where('is_active', '=','1');
+        $active_lang = $this->getFullActiveLanguages();
         if (!$cLang || !$active_lang->contains('code', $cLang)){
             $cLang = 'en';
         }

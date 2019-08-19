@@ -1,0 +1,15 @@
+1,1,0,"{""de"": ""Über uns"", ""en"": ""About Us"", ""es"": ""Sobre nosotros"", ""ru"": ""О нас"", ""ua"": ""Про нас""}",about,0,1,2019-05-17 13:20:08,2019-07-04 20:19:30
+2,1,0,"{""de"": ""Karriere"", ""en"": ""Careers"", ""es"": ""Carreras profesionales"", ""ru"": ""Карьера"", ""ua"": ""Кар'єра""}",careers,0,2,2019-05-17 13:20:08,2019-07-04 20:19:33
+3,1,0,"{""de"": ""Presse Medien"", ""en"": ""Press/Media"", ""es"": ""Prensa/Medios"", ""ru"": ""Пресса"", ""ua"": ""Преса / ЗМІ""}",media,0,3,2019-05-17 13:20:08,2019-07-04 20:19:37
+4,1,0,"{""de"": ""Anlegerbeziehungen"", ""en"": ""Investor relations"", ""es"": ""Relaciones con inversionistas"", ""ru"": ""Инвесторам"", ""ua"": ""Відносини з інвесторами""}",investors,0,4,2019-05-17 13:20:08,2019-07-04 20:19:40
+5,1,1,"{""de"": ""Inhalte verkaufen"", ""en"": ""Sell content"", ""es"": ""Vender contenido"", ""ru"": ""Продать контент"", ""ua"": ""Продаж вмісту""}",sell_content,0,5,2019-05-17 13:20:08,2019-07-04 20:19:44
+6,1,1,"{""de"": ""FAQ"", ""en"": ""FAQ"", ""es"": ""Preguntas más frecuentes"", ""ru"": ""Ч.З.Вопросы"", ""ua"": ""Ч.З.Вопроси""}",faq,0,6,2019-05-17 13:20:08,2019-07-04 20:19:47
+7,1,2,"{""de"": ""Für Entwickler"", ""en"": ""Developers"", ""es"": ""Para desarrolladores"", ""ru"": ""Разработчикам"", ""ua"": ""Розробникам""}",developer,0,7,2019-05-17 13:20:08,2019-07-04 20:19:51
+8,1,2,"{""de"": ""Partner/Wiederverkäufer"", ""en"": ""Affiliate/Reseller"", ""es"": ""Afiliado/Revendedor"", ""ru"": ""Партнеры/Посредники"", ""ua"": ""Партнеры/ Посередники""}",affiliate,0,8,2019-05-17 13:20:08,2019-07-04 20:19:55
+9,1,2,"{""de"": ""Internationaler Reseller"", ""en"": ""International reseller"", ""es"": ""Revendedor internacional"", ""ru"": ""Международные посредники"", ""ua"": ""Міжнародні посередники""}",international,0,9,2019-05-17 13:20:08,2019-07-04 20:20:01
+10,1,3,"{""de"": ""Zuhause"", ""en"": ""Home"", ""es"": ""Casa"", ""ru"": ""Главная"", ""ua"": ""Головна""}",index,0,10,2019-05-17 13:20:08,2019-05-21 19:24:15
+11,1,3,"{""de"": ""Lagermodell"", ""en"": ""Stock models"", ""es"": ""Modelo de stock"", ""ru"": ""Галерея моделей"", ""ua"": ""Галерея моделей""}",models,0,11,2019-05-17 13:20:08,2019-07-04 20:20:07
+12,1,3,"{""de"": ""Gutscheine"", ""en"": ""Coupons"", ""es"": ""Cupones"", ""ru"": ""Купоны"", ""ua"": ""Купони""}",coupons,0,12,2019-05-17 13:20:08,2019-07-04 20:20:13
+13,1,3,"{""de"": ""Trend-Themen"", ""en"": ""Trending topics"", ""es"": ""Tendencia de los temas"", ""ru"": ""Актуальные темы"", ""ua"": ""Теми з тенденціями""}",topics,0,13,2019-05-17 13:20:08,2019-07-04 20:20:18
+14,1,3,"{""de"": ""Persönliches Konto"", ""en"": ""Personal account"", ""es"": ""Cuenta personal"", ""ru"": ""Личный кабинет"", ""ua"": ""Особистий кабінет""}",sign-in,0,14,2019-05-17 13:20:08,2019-05-21 19:24:15
+15,1,3,"{""de"": ""Anmeldung"", ""en"": ""Registration"", ""es"": ""Registro"", ""ru"": ""Регистрация"", ""ua"": ""Реєстрація""}",join,0,15,2019-05-17 13:20:08,2019-05-21 19:24:15

@@ -60,6 +60,12 @@ export default [
                             .default
                     },
                     {
+                        path: '/contents',
+                        name: 'contents',
+                        component: require('$comp/admin/content/Contents')
+                            .default
+                    },
+                    {
                         path: '/components',
                         component: require('$comp/admin/components/ComponentsWrapper')
                             .default,
