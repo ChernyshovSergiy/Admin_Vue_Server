@@ -95,4 +95,11 @@ export const api = Object.assign(new URL(apiUrl), {
         url: 'content'
     },
 
+    menus: {
+        url: 'menus'
+    },
+    menu: {
+        url: 'menu'
+    },
+
 });

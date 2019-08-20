@@ -60,6 +60,12 @@ export default [
                             .default
                     },
                     {
+                        path: '/menus',
+                        name: 'menus',
+                        component: require('$comp/admin/menu/Menu')
+                            .default
+                    },
+                    {
                         path: '/contents',
                         name: 'contents',
                         component: require('$comp/admin/content/Contents')

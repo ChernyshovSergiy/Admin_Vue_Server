@@ -205,6 +205,14 @@ export default {
                 ],
                 [
                     {
+                        title: 'menu',
+                        icon: 'menu',
+                        to: { name: 'menus' },
+                        exact: false
+                    }
+                ],
+                [
+                    {
                         title: 'content',
                         icon: 'ballot',
                         to: { name: 'contents' },

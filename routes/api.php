@@ -33,6 +33,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('status', 'Admin\StatusController')->except(['index']);
         Route::get('contents/{cLang}', 'Admin\ContentController@index');
         Route::apiResource('content', 'Admin\ContentController')->except(['index']);
+        Route::get('menus/{cLang}', 'Admin\MenuController@index');
+        Route::apiResource('menu', 'Admin\MenuController')->except(['index']);
 
     });
 

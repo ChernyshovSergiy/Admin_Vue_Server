@@ -87,5 +87,18 @@
     "text": "Текст",
     "content_successfully_updated": "Контент успешно обновлен",
     "new_content": "Добавить Контент",
-    "edit_content": "Изменить Контент"
+    "edit_content": "Изменить Контент",
+
+    "menu": "Пункты Меню",
+    "add_menu_point": "Создать Пункт Меню",
+    "edit_menu_point": "Изменить Пункт Меню",
+    "section": "Блок",
+    "url": "Ссылка",
+    "parent": "Родитель",
+    "sort": "№ Сортировки",
+    "menu_successfully_updated": "Пункт Меню Успешно Обновлен",
+    "our_company": "Наша компания",
+    "help": "Помощь",
+    "partner": "Партнеры",
+    "3dmriya": "3D Mriya"
 }
