@@ -100,5 +100,9 @@
     "our_company": "Our Company",
     "help": "Help",
     "partner": "Partner",
-    "3dmriya": "3D Mriya"
+    "3dmriya": "3D Mriya",
+    "root": "Root",
+    "sort_is_required": "Sort is required",
+    "sort_must_be_numeric": "Sort must be numeric",
+    "menu_add_successfully": "Menu Point Add Successfully"
 }

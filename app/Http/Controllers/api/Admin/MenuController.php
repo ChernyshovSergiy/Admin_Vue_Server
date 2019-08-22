@@ -21,9 +21,9 @@ class MenuController extends Controller
         return MenuResource::collection($this->model->getMenuByLang($cLang));
     }
 
-    public function store(ValidateRequest $request)
+    public function store(ValidateRequest $request): MenuResource
     {
-        //
+        return new MenuResource($this->model->addMenuPoint($request));
     }
 
     public function show(Menu $menu): MenuResource
@@ -38,6 +38,12 @@ class MenuController extends Controller
 
     public function destroy(Menu $menu)
     {
-        //
+        try {
+            $menu->delete();
+        } catch (\Exception $e) {
+        }
+
+        return response()->json(null, 204);
     }
+
 }

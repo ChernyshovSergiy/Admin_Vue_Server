@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Traits\Methods\BuildJson;
 use App\Traits\Methods\LanguagesFilter;
+use App\Traits\Methods\PrepareLangStrForJsonMethods;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Lang;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -36,7 +38,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
  */
 class Menu extends Model
 {
-    use BuildJson, LanguagesFilter;
+    use BuildJson, LanguagesFilter, PrepareLangStrForJsonMethods;
 
     protected $fillable = [
         'id',
@@ -85,6 +87,7 @@ class Menu extends Model
                 'sort'=>$menu->sort
             ];
         }
+//        $menu_points= Arr::prepend($menu_points,['max' => self::max('sort') + 1]);
         return collect($menu_points);
     }
 
@@ -103,14 +106,23 @@ class Menu extends Model
 
     public function editMenu($request, $menu)
     {
-        if (!$request->title){
+        if (!$request->url){
             $menu->is_active = $request->is_active;
             $menu->update();
         } else {
-//            $menu->fill($request->all());
-//            $menu->setMenu($request, $menu->id);
-//            $menu->update();
+            $menu->fill($request->all());
+            $menu->title = json_encode($menu->createLangString($request, 'title'));
+            $menu->update();
         }
+        return $menu;
+    }
+
+    public function addMenuPoint($request)
+    {
+        $menu = new static;
+        $menu->fill($request->all());
+        $menu->title = json_encode($menu->createLangString($request, 'title'));
+        $menu->save();
         return $menu;
     }
 

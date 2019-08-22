@@ -23,7 +23,7 @@
                         clearable
                     />
                     <v-spacer />
-                    <v-dialog v-model="dialog" max-width="auto">
+                    <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on }">
                             <v-btn color="success" dark class="mb-2" v-on="on">
                                 {{ $t('add') }}
@@ -65,7 +65,9 @@
                                         >
                                             <v-flex xs12>
                                                 <v-text-field
-                                                    v-model="items.title[language]"
+                                                    v-model="
+                                                        items.title[language]
+                                                    "
                                                     :label="
                                                         `${$t('title') +
                                                             ': ' +
@@ -73,7 +75,7 @@
                                                     "
                                                     :rules="titleRules"
                                                     type="text"
-                                                    :counter="20"
+                                                    :counter="30"
                                                     required
                                                 />
                                             </v-flex>
@@ -84,7 +86,7 @@
                                                 :label="`${$t('url')}`"
                                                 :rules="titleRules"
                                                 type="text"
-                                                :counter="20"
+                                                :counter="30"
                                                 required
                                             />
                                         </v-flex>
@@ -95,7 +97,7 @@
                                                 prepend-inner-icon="publish"
                                                 :label="`${$t('parent')}`"
                                                 return-object
-                                                item-text="value"
+                                                item-text="parent"
                                                 item-value="id"
                                             />
                                         </v-flex>
@@ -231,7 +233,15 @@ export default {
                 { id: 2, value: this.$t('partner') },
                 { id: 3, value: this.$t('3dmriya') }
             ];
-        }
+        },
+        // sort() {
+        //     console.log(this.menus);
+        //     if (this.editedIndex !== -1) {
+        //         return this.items.sort;
+        //     } else {
+        //         return this.menus.max;
+        //     }
+        // }
     },
     watch: {
         cLang() {
@@ -261,6 +271,19 @@ export default {
                     .get(api.path('menus') + '/' + this.cLang)
                     .then(req => {
                         this.menus = req.data.data;
+                        this.parent = [
+                            {
+                                id: 0,
+                                parent: this.$t('root')
+                            }
+                        ];
+                        let self = this;
+                        this.menus.forEach(function(menu) {
+                            self.parent.push({
+                                id: menu.id,
+                                parent: menu.title
+                            });
+                        });
                     })
                     .catch(e => {
                         console.log('fetchMenusError: ', e);
@@ -327,33 +350,39 @@ export default {
             if (this.$refs.form.validate()) {
                 let self = this;
                 let payload = Object.assign({}, this.items);
-                delete payload.headline;
-                delete payload.sub_headline;
-                delete payload.text;
+                delete payload.title;
                 if (typeof payload.is_active === 'object') {
                     payload.is_active = payload.is_active.id;
                 } else {
                     payload.is_active = this.items.is_active;
                 }
+                if (typeof payload.section === 'object') {
+                    payload.section = Number(payload.section.id);
+                } else {
+                    payload.section = Number(this.items.section);
+                }
                 this.languages.forEach(function(lang) {
-                    payload['headline:' + lang] = self.items.headline[lang];
-                    payload['sub_headline:' + lang] =
-                        self.items.sub_headline[lang];
-                    payload['text:' + lang] = self.items.text[lang];
+                    payload['title:' + lang] = self.items.title[lang];
                 });
+                if (typeof payload.parent === 'object') {
+                    payload.parent = Number(payload.parent.id);
+                } else {
+                    payload.parent = Number(this.items.parent);
+                }
+                payload.sort = Number(this.items.sort);
 
                 if (this.editedIndex > -1) {
                     try {
                         await axios
                             .put(
-                                api.path('content') + '/' + this.editedIndex,
+                                api.path('menu') + '/' + this.editedIndex,
                                 payload
                             )
                             .then(() => {
                                 this.initialize();
                                 this.$refs.form.reset();
                                 this.$toast.success(
-                                    this.$t('content_successfully_updated'),
+                                    this.$t('menu_successfully_updated'),
                                     {
                                         timeout: 10000,
                                         icon: 'done_outline',
@@ -375,17 +404,17 @@ export default {
                                 );
                             });
                     } catch (e) {
-                        console.log('ErrorContentEditSave: ', e);
+                        console.log('ErrorMenuEditSave: ', e);
                     }
                 } else {
                     try {
                         await axios
-                            .post(api.path('content'), payload)
+                            .post(api.path('menu'), payload)
                             .then(() => {
                                 this.initialize();
                                 this.$refs.form.reset();
                                 this.$toast.success(
-                                    this.$t('content_add_successfully'),
+                                    this.$t('menu_add_successfully'),
                                     {
                                         timeout: 10000,
                                         icon: 'done_outline',
@@ -407,7 +436,7 @@ export default {
                                 );
                             });
                     } catch (e) {
-                        console.log('ErrorContentAdd: ', e);
+                        console.log('ErrorMenuAdd: ', e);
                     }
                 }
             }
@@ -430,7 +459,7 @@ export default {
                         });
                     });
             } catch (e) {
-                console.log('ErrorContentEdit: ', e);
+                console.log('ErrorMenuEdit: ', e);
             }
         },
         deleteItem(item) {
@@ -448,7 +477,7 @@ export default {
                 .then(result => {
                     if (result.value) {
                         axios
-                            .delete(api.path('content') + '/' + item)
+                            .delete(api.path('menu') + '/' + item)
                             .then(() => {
                                 this.initialize();
 
