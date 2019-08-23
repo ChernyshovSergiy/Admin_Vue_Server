@@ -23,18 +23,23 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::group(['middleware' => ['jwt', 'cLang']], function() {
-        Route::post('logout', 'Auth\LoginController@logout');
-
-        Route::get('me', 'Auth\LoginController@me');
+        Route::group(['namespace' => 'Auth'], function (){
+            Route::post('logout', 'LoginController@logout');
+            Route::get('me', 'LoginController@me');
+        });
         Route::put('profile', 'ProfileController@update');
-        Route::apiResource('language', 'Admin\LanguageController');
-        Route::get('languages', 'Admin\LanguageController@actives');
-        Route::get('statuses/{cLang}', 'Admin\StatusController@index');
-        Route::apiResource('status', 'Admin\StatusController')->except(['index']);
-        Route::get('contents/{cLang}', 'Admin\ContentController@index');
-        Route::apiResource('content', 'Admin\ContentController')->except(['index']);
-        Route::get('menus/{cLang}', 'Admin\MenuController@index');
-        Route::apiResource('menu', 'Admin\MenuController')->except(['index']);
+        Route::group(['namespace' => 'Admin'], static function (){
+            Route::apiResource('language', 'LanguageController');
+            Route::get('languages', 'LanguageController@actives');
+            Route::get('statuses/{cLang}', 'StatusController@index');
+            Route::apiResource('status', 'StatusController')->except(['index']);
+            Route::get('contents/{cLang}', 'ContentController@index');
+            Route::apiResource('content', 'ContentController')->except(['index']);
+            Route::get('menus/{cLang}', 'MenuController@index');
+            Route::apiResource('menu', 'MenuController')->except(['index']);
+            Route::get('modelings/{cLang}', 'ModelingOrderController@index');
+            Route::apiResource('modeling', 'ModelingOrderController')->except(['index']);
+        });
 
     });
 

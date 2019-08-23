@@ -21,8 +21,10 @@
     "orders": "Заказы",
     "modeling_orders": "Заказы на Моделирование",
     "printing_orders": "Заказы на 3D Печать",
+    "painting_orders": "Заказы на Роспись",
     "modeling_page": "Страница Заказы на Моделирование",
     "printing_page": "Страница Заказы на 3D Печать",
+    "painting_page": "Страница Заказы на Роспись",
     "your_profile": "Ваш Профайл",
     "view": "Посмотреть",
     "edit": "Изменить",
@@ -104,5 +106,11 @@
     "root": "Корневой",
     "sort_is_required": "Сортировка обязательна",
     "sort_must_be_numeric": "Сортировка должна быть числовой",
-    "menu_add_successfully": "Пункт Меню Успешно Добавлен"
+    "menu_add_successfully": "Пункт Меню Успешно Добавлен",
+
+    "status": "Статус",
+    "lang_name": "Название Языка",
+    "materials": "Материалы",
+    "texturing": "Текстурирование",
+    "executor": "Исполнитель"
 }

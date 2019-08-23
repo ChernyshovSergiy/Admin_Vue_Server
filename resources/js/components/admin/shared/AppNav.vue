@@ -205,6 +205,33 @@ export default {
                 ],
                 [
                     {
+                        title: 'orders',
+                        icon: 'add_shopping_cart',
+                        model: true,
+                        items: [
+                            {
+                                title: 'modeling_orders',
+                                icon: 'edit',
+                                to: { name: 'modeling_orders' },
+                                exact: false
+                            },
+                            {
+                                title: 'printing_orders',
+                                icon: 'colorize',
+                                to: { name: 'printing_orders' },
+                                exact: false
+                            },
+                            {
+                                title: 'painting_orders',
+                                icon: 'brush',
+                                to: { name: 'painting_orders' },
+                                exact: false
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
                         title: 'menu',
                         icon: 'menu',
                         to: { name: 'menus' },

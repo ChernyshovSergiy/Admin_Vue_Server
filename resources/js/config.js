@@ -102,4 +102,11 @@ export const api = Object.assign(new URL(apiUrl), {
         url: 'menu'
     },
 
+    modelings: {
+        url: 'modelings'
+    },
+    modeling: {
+        url: 'modeling'
+    },
+
 });

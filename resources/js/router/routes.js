@@ -60,6 +60,31 @@ export default [
                             .default
                     },
                     {
+                        path: '/orders',
+                        component: require('$comp/admin/orders/OrdersWrapper')
+                            .default,
+                        children: [
+                            {
+                                path: 'modeling_orders',
+                                name: 'modeling_orders',
+                                component: require('$comp/admin/orders/modeling/ModelingOrders')
+                                    .default
+                            },
+                            {
+                                path: 'printing_orders',
+                                name: 'printing_orders',
+                                component: require('$comp/admin/orders/printing/PrintingOrders')
+                                    .default
+                            },
+                            {
+                                path: 'painting_orders',
+                                name: 'painting_orders',
+                                component: require('$comp/admin/orders/painting/PaintingOrders')
+                                    .default
+                            }
+                        ]
+                    },
+                    {
                         path: '/menus',
                         name: 'menus',
                         component: require('$comp/admin/menu/Menu')
