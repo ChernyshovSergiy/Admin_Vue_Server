@@ -33,34 +33,117 @@
                     <v-spacer />
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on }">
-                            <v-btn color="success" dark class="mb-2" v-on="on">
+                            <v-btn
+                                color="success"
+                                dark
+                                class="mb-2"
+                                @click="getStatuses"
+                                v-on="on"
+                            >
                                 {{ $t('add') }}
                             </v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
-                                <span class="headline">{{ formTitle }}</span>
+                                <span class="headline blue--text">{{ formTitle }}</span>
                             </v-card-title>
                             <v-form ref="form" v-model="valid" lazy-validation>
                                 <v-card-text>
                                     <v-container grid-list-md>
-                                        <v-layout
-                                            v-for="language in languages"
-                                            :key="language"
-                                            wrap
-                                        >
+                                        <v-layout wrap>
+                                            <v-flex xs12 md6>
+                                                <v-select
+                                                    v-model="items.status_id"
+                                                    :items="statuses"
+                                                    prepend-inner-icon="new_releases"
+                                                    :label="`${$t('status')}`"
+                                                    return-object
+                                                    item-text="title"
+                                                    item-value="id"
+                                                    :hint="
+                                                        `${$t('order_status')}`
+                                                    "
+                                                    persistent-hint
+                                                    :rules="statusRules"
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md6>
+                                                <v-select
+                                                    v-model="items.language_id"
+                                                    :items="languages"
+                                                    prepend-inner-icon="g_translate"
+                                                    :label="
+                                                        `${$t('lang_name')}`
+                                                    "
+                                                    return-object
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    :hint="
+                                                        `${$t(
+                                                            'customer_communication_language'
+                                                        )}`
+                                                    "
+                                                    persistent-hint
+                                                    :rules="languageRules"
+                                                />
+                                            </v-flex>
                                             <v-flex xs12>
                                                 <v-text-field
-                                                    v-model="items[language]"
-                                                    :label="
-                                                        `${$t('title') +
-                                                            ': ' +
-                                                            language}`
+                                                    v-model="items.link"
+                                                    :label="`${$t('link')}`"
+                                                    :hint="
+                                                        `${$t(
+                                                            'link_to_folder'
+                                                        )}`
                                                     "
-                                                    :rules="titleRules"
+                                                    persistent-hint
+                                                    :rules="linkRules"
+                                                    :counter="500"
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md6>
+                                                <v-text-field
+                                                    v-model="items.name"
+                                                    :label="
+                                                        `${$t('customer_name')}`
+                                                    "
+                                                    :rules="nameRules"
                                                     type="text"
                                                     :counter="20"
                                                     required
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md6>
+                                                <v-text-field
+                                                    v-model="items.email"
+                                                    :label="
+                                                        `${$t(
+                                                            'customer_email'
+                                                        )}`
+                                                    "
+                                                    :rules="emailRules"
+                                                    required
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md5>
+                                                <v-checkbox
+                                                    v-model="items.texturing"
+                                                    :label="
+                                                        `${$t('texturing')}`
+                                                    "
+                                                    value="1"
+                                                    color="primary"
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md7>
+                                                <v-select
+                                                    v-model="items.executor_id"
+                                                    :items="executors"
+                                                    prepend-inner-icon="group"
+                                                    :label="`${$t('executor')}`"
+                                                    return-object
+                                                    item-text="name"
+                                                    item-value="id"
                                                 />
                                             </v-flex>
                                         </v-layout>
@@ -70,7 +153,7 @@
                                 <v-card-actions>
                                     <v-spacer />
                                     <v-btn
-                                        color="blue darken-1"
+                                        color="primary"
                                         text
                                         outlined
                                         @click="close"
@@ -79,7 +162,7 @@
                                     </v-btn>
                                     <v-btn
                                         :disabled="!valid"
-                                        color="blue darken-1"
+                                        color="primary"
                                         outlined
                                         @click="save"
                                     >
@@ -111,12 +194,7 @@
             </template>
             <template v-slot:item.mailto="{ item }">
                 <div class="caption">
-                    <v-btn
-                        text
-                        icon
-                        :href="'mailto:' + item.email"
-                        target="_blank"
-                    >
+                    <v-btn text icon :href="'mailto:' + item.email">
                         <v-icon small color="teal darken-2">
                             email
                         </v-icon>
@@ -150,28 +228,48 @@ export default {
         return {
             modeling_orders: [],
             languages: [],
+            statuses: [],
+            executors: [],
             items: [],
             valid: true,
             editedIndex: -1,
             activeLanguages: [],
             search: '',
             dialog: false,
-            titleRules: [
-                v => !!v || this.$t('title_is_required'),
+            statusRules: [v => !!v || this.$t('status_is_required')],
+            languageRules: [v => !!v || this.$t('language_is_required')],
+            nameRules: [
+                v => !!v || this.$t('name_is_required'),
                 v =>
                     (v || '').length >= 3 ||
-                    this.$t('title_must_be_greater_than_3_characters'),
+                    this.$t('name_must_be_greater_than_3_characters'),
                 v =>
                     (v || '').length <= 20 ||
-                    this.$t('title_must_be_less_than_20_characters')
+                    this.$t('name_must_be_less_than_20_characters')
+            ],
+            emailRules: [
+                v => !!v || this.$t('email_is_required'),
+                v =>
+                    /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(
+                        v
+                    ) || this.$t('email_must_be_valid')
+            ],
+            linkRules: [
+                v => !!v || this.$t('link_is_required'),
+                v =>
+                    /^(ftp|http|https):\/\/[^ "]+$/.test(v) ||
+                    this.$t('link_must_be_valid'),
+                v =>
+                    (v || '').length <= 500 ||
+                    this.$t('link_must_be_less_than_500_characters')
             ]
         };
     },
     computed: {
         formTitle() {
             return this.editedIndex === -1
-                ? this.$t('new_status')
-                : this.$t('edit_status');
+                ? this.$t('new_modeling_order')
+                : this.$t('edit_modeling_order');
         },
         cLang() {
             return this.$i18n.locale;
@@ -185,6 +283,7 @@ export default {
     created() {
         this.initialize();
         this.getLanguages();
+        this.getExecutors();
     },
 
     methods: {
@@ -223,10 +322,18 @@ export default {
         },
         async getLanguages() {
             try {
+                let self = this;
                 await axios
-                    .get(api.path('languages'))
+                    .get(api.path('language'))
                     .then(req => {
-                        this.languages = req.data;
+                        req.data.data.forEach(function(lang) {
+                            if (lang.is_active === 1) {
+                                self.languages.push({
+                                    id: lang.id,
+                                    name: lang.name
+                                });
+                            }
+                        });
                     })
                     .catch(e => {
                         console.log('fetchLangError: ', e);
@@ -234,6 +341,38 @@ export default {
                     });
             } catch (e) {
                 console.log('initializeLangError: ', e);
+                return [];
+            }
+        },
+        async getStatuses() {
+            try {
+                await axios
+                    .get(api.path('statuses') + '/' + this.cLang)
+                    .then(req => {
+                        this.statuses = req.data.data;
+                    })
+                    .catch(e => {
+                        console.log('fetchStatusError: ', e);
+                        return [];
+                    });
+            } catch (e) {
+                console.log('initializeStatusError: ', e);
+                return [];
+            }
+        },
+        async getExecutors() {
+            try {
+                await axios
+                    .get(api.path('executors') + '/' + 'modeling')
+                    .then(req => {
+                        this.executors = req.data.data;
+                    })
+                    .catch(e => {
+                        console.log('fetchStatusError: ', e);
+                        return [];
+                    });
+            } catch (e) {
+                console.log('initializeStatusError: ', e);
                 return [];
             }
         },

@@ -109,4 +109,6 @@ export const api = Object.assign(new URL(apiUrl), {
         url: 'modeling'
     },
 
+    executors: 'executors'
+
 });

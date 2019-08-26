@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('menu', 'MenuController')->except(['index']);
             Route::get('modelings/{cLang}', 'ModelingOrderController@index');
             Route::apiResource('modeling', 'ModelingOrderController')->except(['index']);
+            Route::get('executors/{status}', 'ExecutorController@index');
         });
 
     });

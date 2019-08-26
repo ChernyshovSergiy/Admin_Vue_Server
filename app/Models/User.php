@@ -32,6 +32,8 @@ use App\Notifications\ResetPassword as ResetPasswordNotification;
  * @property string|null $remember_token
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
+ * @property string|null $status
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereStatus($value)
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -63,5 +65,37 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function getExecutorNameByStatus($status)
+    {
+        if ($status === 'modeling'){
+            $index = 0;
+        } elseif ($status === 'printing'){
+            $index = 1;
+        }elseif ($status === 'painting'){
+            $index = 2;
+        }elseif ($status === '3dscanning'){
+            $index = 3;
+        }elseif ($status === 'photographer'){
+            $index = 4;
+        }elseif ($status === 'photoshop'){
+            $index = 5;
+        } else {
+            return collect([]);
+        }
+        $executors = self::all();
+        $order_executors = [];
+        foreach($executors as $key => $executor){
+            if((int)$executor->status[$index] === 1 && (int)$executor->status[8] === 0 ){
+                $order_executors[$key] = [
+                    'id' => $executor->id ,
+                    'name' => $executor->name,
+                ];
+            }
+        }
+        return collect($order_executors);
+
+
     }
 }

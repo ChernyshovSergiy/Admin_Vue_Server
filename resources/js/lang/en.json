@@ -112,5 +112,22 @@
     "lang_name": "Lang Name",
     "materials": "Materials",
     "texturing": "Texturing",
-    "executor": "Executor"
+    "executor": "Executor",
+    "link": "Link",
+    "link_to_folder": "link to Google Disk folder",
+    "customer_name": "Customer Name",
+    "customer_email": "Customer Email",
+    "customer_communication_language": "Customer communication language",
+    "status_is_required": "Status is required",
+    "language_is_required": "Language is required",
+    "name_is_required": "Name is required",
+    "name_must_be_greater_than_3_characters": "Name must be greater than 3 characters",
+    "name_must_be_less_than_20_characters": "Name must be less than 20 characters",
+    "email_is_required": "E-mail is required",
+    "email_must_be_valid": "E-mail must be valid",
+    "link_is_required": "Link is required",
+    "link_must_be_valid": "Link must be valid",
+    "link_must_be_less_than_500_characters": "Link must be less than 500 characters",
+    "new_modeling_order": "Add New Modeling Order",
+    "edit_modeling_order": "Edit Modeling Order"
 }
