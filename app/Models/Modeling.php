@@ -132,11 +132,27 @@ class Modeling extends Model
 
     }
 
-    public static function adminAddNewModelingOrder($fields) :void
+    public static function addAdminOrder($fields)
     {
         $order = new static;
-        $order->fill($fields->all());
+        $order->fill($fields);
+        if($order->status_id === 2){
+            $order->generateToken();
+            $lang = $order->language->code;
+            LaravelLocalization::setLocale($lang);
+
+            Mail::to($order)->send(new VerifyMail($order));
+        }
         $order->save();
+        return $order;
+    }
+
+    public function editAdminOrder($request, $order)
+    {
+        $order->fill($request);
+        $order->update();
+
+        return $order;
     }
 
     public function editModelingOrder($request, $id): void

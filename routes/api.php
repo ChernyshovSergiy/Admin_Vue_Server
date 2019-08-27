@@ -40,6 +40,7 @@ Route::prefix('v1')->group(function () {
             Route::get('modelings/{cLang}', 'ModelingOrderController@index');
             Route::apiResource('modeling', 'ModelingOrderController')->except(['index']);
             Route::get('executors/{status}', 'ExecutorController@index');
+            Route::apiResource('executor', 'ExecutorController')->except(['index']);
         });
 
     });

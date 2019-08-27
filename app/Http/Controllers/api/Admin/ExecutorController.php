@@ -25,17 +25,17 @@ class ExecutorController extends Controller
         //
     }
 
-    public function show(User $user)
+    public function show(User $executor): UserResource
+    {
+        return new UserResource(['id'=> $executor->id, 'name'=>$executor->name]);
+    }
+
+    public function update(Request $request, User $executor)
     {
         //
     }
 
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    public function destroy(User $user)
+    public function destroy(User $executor)
     {
         //
     }

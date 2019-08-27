@@ -37,7 +37,7 @@
                                 color="success"
                                 dark
                                 class="mb-2"
-                                @click="getStatuses"
+                                @click="add"
                                 v-on="on"
                             >
                                 {{ $t('add') }}
@@ -45,7 +45,9 @@
                         </template>
                         <v-card>
                             <v-card-title>
-                                <span class="headline blue--text">{{ formTitle }}</span>
+                                <span class="headline blue--text">{{
+                                    formTitle
+                                }}</span>
                             </v-card-title>
                             <v-form ref="form" v-model="valid" lazy-validation>
                                 <v-card-text>
@@ -233,7 +235,6 @@ export default {
             items: [],
             valid: true,
             editedIndex: -1,
-            activeLanguages: [],
             search: '',
             dialog: false,
             statusRules: [v => !!v || this.$t('status_is_required')],
@@ -282,8 +283,8 @@ export default {
     },
     created() {
         this.initialize();
-        this.getLanguages();
-        this.getExecutors();
+        // this.getLanguages();
+        // this.getExecutors();
     },
 
     methods: {
@@ -303,6 +304,11 @@ export default {
                 { text: this.$t('executor'), value: 'executor' },
                 { text: this.$t('actions'), value: 'action', sortable: false }
             ];
+        },
+        add() {
+            this.getStatuses();
+            this.getExecutors();
+            this.getLanguages();
         },
         async initialize() {
             try {
@@ -376,23 +382,78 @@ export default {
                 return [];
             }
         },
+        async getExecutor(id) {
+            let self = this;
+            try {
+                await axios
+                    .get(api.path('executor') + '/' + id)
+                    .then(req => {
+                        self.executors.push({
+                            id: req.data.data.id,
+                            name: req.data.data.name
+                        });
+                    })
+                    .catch(e => {
+                        console.log('fetchExecutorError: ', e);
+                        return [];
+                    });
+            } catch (e) {
+                console.log('initializeExecutorError: ', e);
+                return [];
+            }
+        },
+        async getLang(id) {
+            let self = this;
+            try {
+                await axios
+                    .get(api.path('language') + '/' + id)
+                    .then(req => {
+                        self.languages.push({
+                            id: req.data.data.id,
+                            name: req.data.data.name
+                        });
+                    })
+                    .catch(e => {
+                        console.log('fetchLanguageError: ', e);
+                        return [];
+                    });
+            } catch (e) {
+                console.log('initializeLanguageError: ', e);
+                return [];
+            }
+        },
         close() {
             this.dialog = false;
+            this.executors = [];
+            this.languages = [];
             this.$refs.form.reset();
             this.editedIndex = -1;
         },
         async save() {
             if (this.$refs.form.validate()) {
-                let self = this;
-                let payload = {};
-                this.languages.forEach(function(lang) {
-                    payload[lang] = self.items[lang];
-                });
+                let payload = Object.assign({}, this.items);
+                if (typeof payload.status_id === 'object') {
+                    payload.status_id = payload.status_id.id;
+                } else {
+                    payload.status_id = this.items.status_id;
+                }
+                if (typeof payload.language_id === 'object') {
+                    payload.language_id = payload.language_id.id;
+                } else {
+                    payload.language_id = this.items.language_id;
+                }
+                if (typeof payload.executor_id === 'object') {
+                    payload.executor_id = payload.executor_id.id;
+                } else {
+                    payload.executor_id = this.items.executor_id;
+                }
+                payload.texturing = payload.texturing === '1' ? 1 : 0;
                 if (this.editedIndex > -1) {
+                    console.log(this.editedIndex);
                     try {
                         await axios
                             .put(
-                                api.path('status') + '/' + this.editedIndex,
+                                api.path('modeling') + '/' + this.editedIndex,
                                 payload
                             )
                             .then(() => {
@@ -426,12 +487,12 @@ export default {
                 } else {
                     try {
                         await axios
-                            .post(api.path('status'), payload)
+                            .post(api.path('modeling'), payload)
                             .then(() => {
                                 this.initialize();
                                 this.$refs.form.reset();
                                 this.$toast.success(
-                                    this.$t('status_add_successfully'),
+                                    this.$t('order_add_successfully'),
                                     {
                                         timeout: 10000,
                                         icon: 'done_outline',
@@ -459,16 +520,31 @@ export default {
             }
         },
         async editItem(item) {
+            this.getStatuses();
+            this.getExecutors();
+            this.getLanguages();
             try {
                 await axios
-                    .get(api.path('status') + '/' + item)
+                    .get(api.path('modeling') + '/' + item)
                     .then(res => {
+                        this.items = Object.assign({}, res.data.data);
+                        this.items.texturing =
+                            this.items.texturing === 1 ? '1' : null;
                         let self = this;
-                        let status = {};
-                        this.languages.forEach(function(lang) {
-                            status[lang] = res.data.data.title[lang];
+                        let user_id = this.items.executor_id;
+                        let user = self.executors.some(function(executor) {
+                            return executor.id === user_id;
                         });
-                        self.items = Object.assign({}, status);
+                        if (!user && user_id !== null) {
+                            this.getExecutor(user_id);
+                        }
+                        let lang_id = this.items.language_id;
+                        let lang = self.languages.some(function(language) {
+                            return language.id === lang_id;
+                        });
+                        if (!lang && lang_id!== null) {
+                            this.getLang(lang_id);
+                        }
                         this.editedIndex = item;
                         this.dialog = true;
                     })

@@ -129,5 +129,6 @@
     "link_must_be_valid": "Ссылка должна быть действительной",
     "link_must_be_less_than_500_characters": "Ссылка должна быть не более 500 символов",
     "new_modeling_order": "Добавить Новый заказ на Моделирование",
-    "edit_modeling_order": "Изменить заказ на Моделирование"
+    "edit_modeling_order": "Изменить заказ на Моделирование",
+    "order_add_successfully": "Заказ успешно добавлен"
 }

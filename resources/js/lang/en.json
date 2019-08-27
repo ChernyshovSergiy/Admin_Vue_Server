@@ -129,5 +129,6 @@
     "link_must_be_valid": "Link must be valid",
     "link_must_be_less_than_500_characters": "Link must be less than 500 characters",
     "new_modeling_order": "Add New Modeling Order",
-    "edit_modeling_order": "Edit Modeling Order"
+    "edit_modeling_order": "Edit Modeling Order",
+    "order_add_successfully": "Order add successfully"
 }
