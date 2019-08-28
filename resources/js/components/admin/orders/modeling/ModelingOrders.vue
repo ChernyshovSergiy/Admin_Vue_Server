@@ -372,6 +372,10 @@ export default {
                     .get(api.path('executors') + '/' + 'modeling')
                     .then(req => {
                         this.executors = req.data.data;
+                        this.executors.push({
+                            id: 0,
+                            name: this.$t('not_assigned')
+                        });
                     })
                     .catch(e => {
                         console.log('fetchStatusError: ', e);
@@ -449,7 +453,6 @@ export default {
                 }
                 payload.texturing = payload.texturing === '1' ? 1 : 0;
                 if (this.editedIndex > -1) {
-                    console.log(this.editedIndex);
                     try {
                         await axios
                             .put(
@@ -460,7 +463,7 @@ export default {
                                 this.initialize();
                                 this.$refs.form.reset();
                                 this.$toast.success(
-                                    this.$t('status_successfully_updated'),
+                                    this.$t('order_successfully_updated'),
                                     {
                                         timeout: 10000,
                                         icon: 'done_outline',
@@ -575,7 +578,7 @@ export default {
                 .then(result => {
                     if (result.value) {
                         axios
-                            .delete(api.path('status') + '/' + item)
+                            .delete(api.path('modeling') + '/' + item)
                             .then(() => {
                                 this.initialize();
 

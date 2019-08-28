@@ -136,6 +136,9 @@ class Modeling extends Model
     {
         $order = new static;
         $order->fill($fields);
+        if($order->executor_id === 0){
+            $order->executor_id = null;
+        }
         if($order->status_id === 2){
             $order->generateToken();
             $lang = $order->language->code;
@@ -147,9 +150,21 @@ class Modeling extends Model
         return $order;
     }
 
+    public function getOrder($order)
+    {
+        if (!$order->executor_id){
+            $order->executor_id = 0;
+        }
+
+        return $order;
+    }
+
     public function editAdminOrder($request, $order)
     {
         $order->fill($request);
+        if($order->executor_id === 0){
+            $order->executor_id = null;
+        }
         $order->update();
 
         return $order;

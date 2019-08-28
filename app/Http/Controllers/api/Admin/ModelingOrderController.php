@@ -27,7 +27,7 @@ class ModelingOrderController extends Controller
 
     public function show(Modeling $modeling): ModelingResource
     {
-        return new ModelingResource($modeling);
+        return new ModelingResource($this->model->getOrder($modeling));
     }
 
     public function update(ValidateRequest $request, Modeling $modeling): ModelingResource
