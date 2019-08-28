@@ -196,7 +196,7 @@
             </template>
             <template v-slot:item.mailto="{ item }">
                 <div class="caption">
-                    <v-btn text icon :href="'mailto:' + item.email">
+                    <v-btn target="_blank" text icon :href="'mailto:' + item.email">
                         <v-icon small color="teal darken-2">
                             email
                         </v-icon>

@@ -22,9 +22,9 @@
     "modeling_orders": "Заказы на Моделирование",
     "printing_orders": "Заказы на 3D Печать",
     "painting_orders": "Заказы на Роспись",
-    "modeling_page": "Страница Заказы на Моделирование",
-    "printing_page": "Страница Заказы на 3D Печать",
-    "painting_page": "Страница Заказы на Роспись",
+    "modeling_page": "Заказы на Моделирование",
+    "printing_page": "Заказы на 3D Печать",
+    "painting_page": "Заказы на Роспись",
     "your_profile": "Ваш Профайл",
     "view": "Посмотреть",
     "edit": "Изменить",
@@ -132,5 +132,14 @@
     "edit_modeling_order": "Изменить заказ на Моделирование",
     "order_add_successfully": "Заказ успешно добавлен",
     "not_assigned": "Не назначен",
-    "order_successfully_updated": "Заказ успешно обновлен"
+    "order_successfully_updated": "Заказ успешно обновлен",
+
+    "new_printing_order": "Добавить Новый заказ на 3D Печать",
+    "edit_printing_order": "Изменить заказ на 3D Печать",
+    "address": "Адрес",
+    "option": "Опции",
+    "size": "Размер",
+    "print_material": "Мат-л Печати",
+    "quality": "Качество",
+    "quantity": "Количество"
 }

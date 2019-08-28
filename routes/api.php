@@ -41,6 +41,9 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('modeling', 'ModelingOrderController')->except(['index']);
             Route::get('executors/{status}', 'ExecutorController@index');
             Route::apiResource('executor', 'ExecutorController')->except(['index']);
+            Route::get('printings/{cLang}', 'PrintingOrderController@index');
+            Route::apiResource('printing', 'PrintingOrderController')->except(['index']);
+            Route::get('/countries/{cLang}', 'CountryListController@index');
         });
 
     });

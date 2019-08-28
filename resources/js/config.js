@@ -110,6 +110,17 @@ export const api = Object.assign(new URL(apiUrl), {
     },
 
     executors: 'executors',
-    executor: 'executor'
+    executor: 'executor',
 
+    printings: {
+        url: 'printings'
+    },
+
+    printing: {
+        url: 'printing'
+    },
+
+    countries: {
+        url: 'countries'
+    },
 });

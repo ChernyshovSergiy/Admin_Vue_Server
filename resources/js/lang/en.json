@@ -132,5 +132,14 @@
     "edit_modeling_order": "Edit Modeling Order",
     "order_add_successfully": "Order add successfully",
     "not_assigned": "Not assigned",
-    "order_successfully_updated": "Order successfully updated"
+    "order_successfully_updated": "Order successfully updated",
+
+    "new_printing_order": "Add New Printing Order",
+    "edit_printing_order": "Edit Printing Order",
+    "address": "Address",
+    "option": "Option",
+    "size": "Size",
+    "print_material": "Print Material",
+    "quality": "Quality",
+    "quantity": "Quantity"
 }
