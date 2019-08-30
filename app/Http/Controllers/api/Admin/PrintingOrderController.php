@@ -26,9 +26,9 @@ class PrintingOrderController extends Controller
         //
     }
 
-    public function show(Printing $printing)
+    public function show(Printing $printing): PrintingResource
     {
-        //
+        return new PrintingResource($this->model->getOrder($printing));
     }
 
     public function update(ValidateRequest $request, Printing $printing)

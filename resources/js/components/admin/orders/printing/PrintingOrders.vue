@@ -31,7 +31,7 @@
                         clearable
                     />
                     <v-spacer />
-                    <v-dialog v-model="dialog" max-width="500px">
+                    <v-dialog v-model="dialog" max-width="550px">
                         <template v-slot:activator="{ on }">
                             <v-btn
                                 color="success"
@@ -92,6 +92,7 @@
                                             <v-flex xs12>
                                                 <v-text-field
                                                     v-model="items.link"
+                                                    prepend-inner-icon="link"
                                                     :label="`${$t('link')}`"
                                                     :hint="
                                                         `${$t(
@@ -106,6 +107,7 @@
                                             <v-flex xs12 md6>
                                                 <v-text-field
                                                     v-model="items.name"
+                                                    prepend-inner-icon="person"
                                                     :label="
                                                         `${$t('customer_name')}`
                                                     "
@@ -118,6 +120,7 @@
                                             <v-flex xs12 md6>
                                                 <v-text-field
                                                     v-model="items.email"
+                                                    prepend-inner-icon="email"
                                                     :label="
                                                         `${$t(
                                                             'customer_email'
@@ -127,17 +130,128 @@
                                                     required
                                                 />
                                             </v-flex>
-                                            <v-flex xs12 md5>
+                                            <v-flex xs12 md4>
                                                 <v-checkbox
-                                                    v-model="items.texturing"
+                                                    v-model="items.hollow"
                                                     :label="
-                                                        `${$t('texturing')}`
+                                                        `${$t('hollow_info')}`
+                                                    "
+                                                    value="1"
+                                                    color="green"
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md4>
+                                                <v-checkbox
+                                                    v-model="items.support"
+                                                    :label="
+                                                        `${$t('support_info')}`
+                                                    "
+                                                    value="1"
+                                                    color="orange"
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md4>
+                                                <v-checkbox
+                                                    v-model="
+                                                        items.post_processing
+                                                    "
+                                                    :label="
+                                                        `${$t(
+                                                            'post_processing_info'
+                                                        )}`
                                                     "
                                                     value="1"
                                                     color="primary"
                                                 />
                                             </v-flex>
-                                            <v-flex xs12 md7>
+                                            <v-flex v-show="!other" xs12>
+                                                <v-select
+                                                    v-model="items.size_id"
+                                                    :items="sizes"
+                                                    prepend-inner-icon="aspect_ratio"
+                                                    :label="
+                                                        `${$t(
+                                                            'collection_size'
+                                                        )}`
+                                                    "
+                                                    return-object
+                                                    item-text="value"
+                                                    item-value="id"
+                                                />
+                                            </v-flex>
+                                            <v-layout v-show="other">
+                                                <v-flex xs12 md6>
+                                                    <v-select
+                                                        v-model="items.size_id"
+                                                        :items="sizes"
+                                                        prepend-inner-icon="aspect_ratio"
+                                                        :label="
+                                                            `${$t(
+                                                                'collection_size'
+                                                            )}`
+                                                        "
+                                                        return-object
+                                                        item-text="value"
+                                                        item-value="id"
+                                                    />
+                                                </v-flex>
+                                                <v-flex xs12 md6>
+                                                    <v-text-field
+                                                        v-model.trim="
+                                                            items.height
+                                                        "
+                                                        prepend-inner-icon="unfold_less"
+                                                        name="height"
+                                                        :label="
+                                                            `${$t('height')}`
+                                                        "
+                                                        type="height"
+                                                        :rules="dynamicRules"
+                                                        data-cy="printingHeightField"
+                                                        required
+                                                    />
+                                                </v-flex>
+                                            </v-layout>
+                                            <v-flex xs12 md6>
+                                                <v-select
+                                                    v-model="items.material"
+                                                    :items="materials"
+                                                    prepend-inner-icon="texture"
+                                                    :label="`${$t('material')}`"
+                                                    return-object
+                                                    item-text="value"
+                                                    item-value="id"
+                                                    :hint="`${$t('3d_printing_material')}`"
+                                                    persistent-hint
+                                                    :rules="selectMaterialRules"
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md6>
+                                                <v-select
+                                                    v-model="items.quality"
+                                                    prepend-inner-icon="high_quality"
+                                                    :items="quality"
+                                                    item-text="value"
+                                                    item-value="id"
+                                                    :rules="selectQualityRules"
+                                                    :label="`${$t('quality')}`"
+                                                    required
+                                                    return-object
+                                                ></v-select>
+                                            </v-flex>
+                                            <v-flex xs12 md6>
+                                                <v-text-field
+                                                    v-model.trim="items.quantity"
+                                                    v-mask="quantityMask"
+                                                    prepend-inner-icon="shopping_basket"
+                                                    name="quantity"
+                                                    :label="`${$t('quantity')}`"
+                                                    type="text"
+                                                    :rules="quantityRules"
+                                                    required
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 md6>
                                                 <v-select
                                                     v-model="items.executor_id"
                                                     :items="executors"
@@ -148,6 +262,118 @@
                                                     item-value="id"
                                                 />
                                             </v-flex>
+                                            <v-layout row fill-height justify-center>
+                                                <div class="title font-weight-light mt-3">
+                                                    {{ $t('recipient_address_title') }}
+                                                </div>
+                                            </v-layout>
+                                            <v-layout row wrap align-space-around fill-height >
+                                                <v-flex xs12 sm6>
+                                                    <v-autocomplete
+                                                        v-model="items.country"
+                                                        :hint="countryInfo"
+                                                        prepend-inner-icon="language"
+                                                        :items="countries"
+                                                        :filter="customFilterCountry"
+                                                        item-text="country_name"
+                                                        item-value="country_alpha2_code"
+                                                        :rules="selectCountryRules"
+                                                        :label="`${$t('country')}`"
+                                                        required
+                                                        persistent-hint
+                                                        return-object
+                                                    ></v-autocomplete>
+                                                </v-flex>
+                                                <v-spacer />
+                                                <v-flex xs12 sm6>
+                                                    <v-text-field
+                                                        v-model.trim="items.zip_code"
+                                                        :disabled="checkCountrySelect"
+                                                        prepend-inner-icon="flag"
+                                                        name="zip"
+                                                        :label="`${$t('zip')}`"
+                                                        type="zip"
+                                                        :rules="zipRules"
+                                                        validate-on-blur
+                                                        required
+                                                        return-masked-value
+                                                        :hint="hintZip"
+                                                        persistent-hint
+                                                        :mask="zipMask"
+                                                    >
+                                                    </v-text-field>
+                                                </v-flex>
+                                            </v-layout>
+                                            <v-layout row wrap align-space-around fill-height >
+                                                <v-flex xs12 sm6>
+                                                    <v-text-field
+                                                        v-model.trim="items.state"
+                                                        :disabled="checkZipCodeSelect"
+                                                        prepend-inner-icon="location_on"
+                                                        name="state"
+                                                        :label="`${$t('state')}`"
+                                                        type="state"
+                                                    >
+                                                    </v-text-field>
+                                                </v-flex>
+                                                <v-spacer />
+                                                <v-flex xs12 sm6>
+                                                    <v-text-field
+                                                        v-if="!zipGet"
+                                                        v-model.trim="items.city"
+                                                        :disabled="checkZipCodeSelect"
+                                                        prepend-inner-icon="location_city"
+                                                        name="city"
+                                                        :rules="cityRules"
+                                                        :label="`${$t('city')}`"
+                                                        type="city"
+                                                    >
+                                                    </v-text-field>
+                                                    <v-select
+                                                        v-if="zipGet"
+                                                        v-model.trim="selectCity"
+                                                        :disabled="checkZipCodeSelect"
+                                                        :hint="`${selectCity.place_name},
+                                                         ${selectCity.state_abbreviation}`"
+                                                        prepend-inner-icon="location_city"
+                                                        :items="cities"
+                                                        item-text="place_name"
+                                                        :label="`${$t('city')}`"
+                                                        required
+                                                        persistent-hint
+                                                        return-object
+                                                    >
+                                                    </v-select>
+                                                </v-flex>
+                                            </v-layout>
+                                            <v-layout row wrap align-space-around fill-height>
+                                                <v-flex xs12 sm6>
+                                                    <v-text-field
+                                                        v-model.trim="items.address"
+                                                        :disabled="checkZipCodeSelect"
+                                                        prepend-inner-icon="where_to_vote"
+                                                        name="address"
+                                                        :rules="addressRules"
+                                                        :label="`${$t('address')}`"
+                                                        type="address"
+                                                    >
+                                                    </v-text-field>
+                                                </v-flex>
+                                                <v-spacer />
+                                                <v-flex xs12 sm6>
+                                                    <v-text-field
+                                                        v-model.trim="items.phone"
+                                                        v-mask="maskPhone"
+                                                        :disabled="checkZipCodeSelect"
+                                                        prepend-icon="phone_iphone"
+                                                        name="phone"
+                                                        :rules="phoneRules"
+                                                        :label="`${$t('phone')}`"
+                                                        type="phone"
+                                                    >
+                                                    </v-text-field>
+                                                </v-flex>
+                                            </v-layout>
                                         </v-layout>
                                     </v-container>
                                 </v-card-text>
@@ -177,22 +403,11 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.materials="{ item }">
-                <v-btn
-                    text
-                    target="_blank"
-                    icon
-                    class="blue--text"
-                    :href="item.link"
-                >
-                    <v-icon small>
+                <a target="_blank" class="link" :href="item.link">
+                    <v-icon small color="primary">
                         visibility
                     </v-icon>
-                </v-btn>
-            </template>
-            <template v-slot:item.texture="{ item }">
-                <v-icon :class="item.texturing === 1 ? 'green--text' : ''">
-                    {{ item.texturing === 1 ? 'done' : '' }}
-                </v-icon>
+                </a>
             </template>
             <template v-slot:item.address="{ item }">
                 <div class="caption">
@@ -208,19 +423,116 @@
                     {{ item.email }}
                 </div>
                 <div class="caption">
-                    <a :href="item.map_link" target="_blank" class="link">
+                    <a
+                        v-if="item.map_link !== '0'"
+                        :href="item.map_link"
+                        target="_blank"
+                        class="link"
+                    >
                         <v-icon small color="orange darken-2">
                             where_to_vote
                         </v-icon>
                     </a>
+                    <v-icon v-else small color="gray darken-2">
+                        where_to_vote
+                    </v-icon>
                     {{ item.position }}
                 </div>
                 <div class="caption">
                     <v-icon small color="blue">
-                        mobile_screen_share
+                        phone_iphone
                     </v-icon>
                     {{ item.phone }}
                 </div>
+            </template>
+            <template v-slot:item.options="{ item }">
+                <v-tooltip right>
+                    <template v-slot:activator="{ on }">
+                        <v-icon
+                            :style="
+                                Number(item.option[0]) === 1
+                                    ? { cursor: 'pointer' }
+                                    : ''
+                            "
+                            small
+                            class="mr-2"
+                            :class="
+                                Number(item.option[0]) === 1
+                                    ? 'green--text'
+                                    : 'grey--text'
+                            "
+                            v-on="on"
+                        >
+                            donut_large
+                        </v-icon>
+                    </template>
+                    <span v-show="Number(item.option[0]) === 1" class="body-1">
+                        {{ $t('hollow_info') }}
+                    </span>
+                </v-tooltip>
+                <v-tooltip right>
+                    <template v-slot:activator="{ on }">
+                        <v-icon
+                            :style="
+                                Number(item.option[1]) === 1
+                                    ? { cursor: 'pointer' }
+                                    : ''
+                            "
+                            small
+                            class="mr-2"
+                            :class="
+                                Number(item.option[1]) === 1
+                                    ? 'orange--text'
+                                    : 'grey--text'
+                            "
+                            v-on="on"
+                        >
+                            nature
+                        </v-icon>
+                    </template>
+                    <span v-show="Number(item.option[1]) === 1" class="body-1">
+                        {{ $t('support_info') }}
+                    </span>
+                </v-tooltip>
+                <v-tooltip right>
+                    <template v-slot:activator="{ on }">
+                        <v-icon
+                            :style="
+                                Number(item.option[2]) === 1
+                                    ? { cursor: 'pointer' }
+                                    : ''
+                            "
+                            small
+                            class="mr-2"
+                            :class="
+                                Number(item.option[2]) === 1
+                                    ? 'blue--text'
+                                    : 'grey--text'
+                            "
+                            v-on="on"
+                        >
+                            verified_user
+                        </v-icon>
+                    </template>
+                    <span v-show="Number(item.option[2]) === 1" class="body-1">
+                        {{ $t('post_processing_info') }}
+                    </span>
+                </v-tooltip>
+            </template>
+            <template v-slot:item.sizes="{ item }">
+                <v-icon
+                    small
+                    :class="
+                        item.size.endsWith('mm') ? 'blue--text' : 'green--text'
+                    "
+                >
+                    {{
+                        item.size.endsWith('mm')
+                            ? 'height'
+                            : 'perm_data_setting'
+                    }}
+                </v-icon>
+                {{ item.size }}
             </template>
             <template v-slot:item.action="{ item }">
                 <v-icon small class="orange--text" @click="editItem(item.id)">
@@ -253,10 +565,22 @@ export default {
             executors: [],
             countries: [],
             items: [],
+            sizes: [],
             valid: true,
             editedIndex: -1,
             search: '',
             dialog: false,
+
+            zipGet: false,
+            maskPhone: '(###) ###-##-##',
+            quantityMask: '######',
+            zipFlag: 'checkChange',
+            zipFlagChange: 'checkZipCodeChange',
+            zipMask: '',
+            zipRange: '',
+            zipCharacters: '8',
+            cities: [],
+
             statusRules: [v => !!v || this.$t('status_is_required')],
             languageRules: [v => !!v || this.$t('language_is_required')],
             nameRules: [
@@ -283,10 +607,74 @@ export default {
                 v =>
                     (v || '').length <= 500 ||
                     this.$t('link_must_be_less_than_500_characters')
+            ],
+            heightRules: [
+                v => !!v || this.$t('height_is_required'),
+                v => /^\d+$/.test(v) || this.$t('height_must_be_numeric'),
+                v =>
+                    Number(v) >= 25 ||
+                    this.$t('height_must_be_more_25_millimeters'),
+                v =>
+                    Number(v) <= 185 ||
+                    this.$t('height_must_be_less_185_millimeters')
+            ],
+            selectMaterialRules: [v => !!v || this.$t('material_is_required')],
+            selectQualityRules: [v => !!v || this.$t('quality_is_required')],
+            selectCountryRules: [
+                v => v.country_name !== '' || this.$t('country_is_required')
+            ],
+            zipRules: [v => !!v || this.$t('zip_is_required')],
+            quantityRules: [
+                v => !!v || this.$t('quantity_is_required'),
+                v => /^\d+$/.test(v) || this.$t('quantity_must_be_numeric'),
+                v =>
+                    v <= 999999 ||
+                    this.$t('quantity_must_be_less_than_6_numbers')
+            ],
+            cityRules: [
+                v => !!v || this.$t('city_is_required'),
+                v =>
+                    /^[a-zA-Z0-9А-Яа-я_]+( [a-zA-Z0-9А-Яа-я_]+)*$/.test(v) ||
+                    this.$t('city_must_be_word'),
+                v =>
+                    (v || '').length >= 1 ||
+                    this.$t('city_must_be_greater_than_1_characters'),
+                v =>
+                    (v || '').length <= 90 ||
+                    this.$t('city_must_be_less_than_90_characters')
+            ],
+            addressRules: [v => !!v || this.$t('address_is_required')],
+            phoneRules: [
+                v => !!v || this.$t('phone_is_required'),
+                v =>
+                    /^[+]?(?:\(\d+(?:\.\d+)?\)|\d+(?:\.\d+)?)(?:[ -]?(?:\(\d+(?:\.\d+)?\)|\d+(?:\.\d+)?))*(?:[ ]?(?:x|ext)\.?[ ]?\d{1,5})?$/.test(
+                        v
+                    ) || this.$t('phone_number_must_be_digital'),
+                v =>
+                    (v || '').length === 15 || this.$t('phone_number_must_be_10_digits')
+            ],
+            materials: [
+                { id: 1, value: this.$t('plastic') },
+                { id: 2, value: this.$t('metal') }
+            ],
+            quality: [
+                { id: 1, value: '30 ' + this.$t('micron') },
+                { id: 2, value: '50 ' + this.$t('micron') },
+                { id: 3, value: '100 ' + this.$t('micron') }
             ]
         };
     },
     computed: {
+        hintZip() {
+            if (this.zipRange !== '') {
+                return this.$t('range') + ' ' + this.zipRange;
+            } else {
+                return this.$t('range') + ' ' + this.$t('not_determined');
+            }
+        },
+        translate(item) {
+            return this.$t(item);
+        },
         formTitle() {
             return this.editedIndex === -1
                 ? this.$t('new_printing_order')
@@ -294,6 +682,45 @@ export default {
         },
         cLang() {
             return this.$i18n.locale;
+        },
+        other() {
+            if (typeof this.items.size_id === 'object') {
+                return Number(this.items.size_id.id) === 0;
+            } else {
+                return Number(this.items.size_id) === 0;
+            }
+        },
+        dynamicRules() {
+            if (typeof this.items.size_id === 'object') {
+                if (Number(this.items.size_id.id) === 0) {
+                    return this.heightRules;
+                } else {
+                    return [];
+                }
+            } else {
+                if (Number(this.items.size_id) === 0) {
+                    return this.heightRules;
+                } else {
+                    return [];
+                }
+            }
+        },
+        checkZipCodeSelect() {
+            return this.items.zip_code === '';
+        },
+        checkCountrySelect() {
+            if (typeof this.items.country === 'object') {
+                return this.items.country.country_name === '';
+            } else {
+                return this.items.country === '';
+            }
+        },
+        countryInfo() {
+            if (typeof this.items.country === 'object') {
+                return this.items.country.country_name + ' (' + this.items.country.country_alpha2_code + ')';
+            } else {
+                return this.items.country;
+            }
         }
     },
     watch: {
@@ -303,6 +730,7 @@ export default {
     },
     created() {
         this.initialize();
+        this.getCountryList();
     },
 
     methods: {
@@ -317,9 +745,9 @@ export default {
                 {
                     text: this.$t('option'),
                     align: 'center',
-                    value: 'option'
+                    value: 'options'
                 },
-                { text: this.$t('size'), value: 'size' },
+                { text: this.$t('size'), value: 'sizes' },
                 { text: this.$t('print_material'), value: 'print_material' },
                 { text: this.$t('quality'), value: 'quality' },
                 { text: this.$t('quantity'), value: 'quantity' },
@@ -332,6 +760,7 @@ export default {
             this.getExecutors();
             this.getLanguages();
             this.getCountryList();
+            this.getCollectionSizes();
         },
         async initialize() {
             try {
@@ -363,6 +792,22 @@ export default {
                     });
             } catch (e) {
                 console.log('initializeCountriesError: ', e);
+                return [];
+            }
+        },
+        async getCollectionSizes() {
+            try {
+                await axios
+                    .get(api.path('sizes') + '/' + this.cLang)
+                    .then(req => {
+                        this.sizes = req.data.data;
+                    })
+                    .catch(e => {
+                        console.log('fetchSizesError: ', e);
+                        return [];
+                    });
+            } catch (e) {
+                console.log('initializeSizesError: ', e);
                 return [];
             }
         },
@@ -466,6 +911,16 @@ export default {
                 return [];
             }
         },
+        customFilterCountry(item, queryText) {
+            const textOne = item.country_name.toLowerCase();
+            const textTwo = item.country_alpha2_code.toLowerCase();
+            const searchText = queryText.toLowerCase();
+
+            return (
+                textOne.indexOf(searchText) > -1 ||
+                textTwo.indexOf(searchText) > -1
+            );
+        },
         close() {
             this.dialog = false;
             this.executors = [];
@@ -567,13 +1022,18 @@ export default {
             this.getExecutors();
             this.getLanguages();
             this.getCountryList();
+            this.getCollectionSizes();
             try {
                 await axios
-                    .get(api.path('modeling') + '/' + item)
+                    .get(api.path('printing') + '/' + item)
                     .then(res => {
                         this.items = Object.assign({}, res.data.data);
-                        this.items.texturing =
-                            this.items.texturing === 1 ? '1' : null;
+                        this.items.hollow =
+                            this.items.hollow === 1 ? '1' : null;
+                        this.items.support =
+                            this.items.support === 1 ? '1' : null;
+                        this.items.post_processing =
+                            this.items.post_processing === 1 ? '1' : null;
                         let self = this;
                         let user_id = this.items.executor_id;
                         let user = self.executors.some(function(executor) {

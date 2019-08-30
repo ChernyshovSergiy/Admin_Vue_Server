@@ -7,4 +7,5 @@ return[
     'metal'        => 'Метал',
     'micron'       => 'микрон',
     'pieces'       => 'шт',
+    'other'       => 'Другой',
 ];

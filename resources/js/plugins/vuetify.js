@@ -2,9 +2,11 @@ import Vue from 'vue';
 import Vuetify, { VSnackbar, VBtn, VIcon } from 'vuetify/lib';
 import VuetifyToast from 'vuetify-toast-snackbar';
 import FlagIcon from 'vue-flag-icon';
+import VueTheMask from 'vue-the-mask';
 // import VueI18n from 'vue-i18n';
 
 Vue.use(FlagIcon);
+Vue.use(VueTheMask)
 // Vue.use(VueI18n);
 
 // const messages = {

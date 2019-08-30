@@ -123,4 +123,8 @@ export const api = Object.assign(new URL(apiUrl), {
     countries: {
         url: 'countries'
     },
+
+    sizes: {
+        url: 'sizes'
+    },
 });

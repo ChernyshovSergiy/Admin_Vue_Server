@@ -44,6 +44,7 @@ Route::prefix('v1')->group(function () {
             Route::get('printings/{cLang}', 'PrintingOrderController@index');
             Route::apiResource('printing', 'PrintingOrderController')->except(['index']);
             Route::get('/countries/{cLang}', 'CountryListController@index');
+            Route::get('sizes/{cLang}', 'SizeController@index');
         });
 
     });

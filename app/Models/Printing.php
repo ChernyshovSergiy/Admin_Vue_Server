@@ -97,7 +97,9 @@ class Printing extends Model
         'language_id', 'executor_id'
     ];
     protected $hidden = [
-        'verify_token'
+        'verify_token',
+        'created_at',
+        'updated_at'
     ];
 
     protected $collection_size = [
@@ -124,7 +126,9 @@ class Printing extends Model
         if (!$cLang || !$active_lang->contains('code', $cLang)){
             $cLang = 'en';
         }
-        $active_printing_orders = self::all()->where('status_id', '>','2');
+        $active_printing_orders =
+            self::orderBy('created_at', 'DESC')
+                ->get()->where('status_id', '>','2');
         $order_points = [];
         LaravelLocalization::setLocale($cLang);
         foreach($active_printing_orders as $key => $order){
@@ -147,6 +151,15 @@ class Printing extends Model
             ];
         }
         return collect($order_points);
+    }
+
+    public function getOrder($order)
+    {
+        if (!$order->executor_id){
+            $order->executor_id = 0;
+        }
+        unset($order->latitude, $order->longitude);
+        return $order;
     }
 
     public function setUserLanguage($code): void
@@ -318,7 +331,9 @@ class Printing extends Model
 
     public function getMapLink(): string
     {
-        return 'https://www.google.com/maps/place/'.$this->latitude.'+'.$this->longitude;
+        return $this->latitude
+        ? 'https://www.google.com/maps/place/'.$this->latitude.'+'.$this->longitude
+        : 0;
     }
 
     public function getSize(): string
