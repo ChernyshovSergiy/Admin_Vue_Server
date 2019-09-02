@@ -9,10 +9,13 @@ import vuetify from '~/plugins/vuetify';
 import { i18n } from '~/plugins/i18n';
 import { Trans } from '~/plugins/Translation';
 import VueSweetalert2 from '~/plugins/sweetalert2';
+import VueResource from 'vue-resource';
 
 Vue.prototype.$i18nRoute = Trans.i18nRoute.bind(Trans);
 
 Vue.config.productionTip = false;
+
+Vue.use(VueResource);
 
 export const app = new Vue({
     i18n,

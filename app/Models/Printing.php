@@ -294,6 +294,14 @@ class Printing extends Model
 
     }
 
+    public function editAdminOrder($request, $order)
+    {
+        $order->fill($request);
+        $order->update();
+
+        return $order;
+    }
+
 
     public function verifyPrintingOrder($token): void
     {

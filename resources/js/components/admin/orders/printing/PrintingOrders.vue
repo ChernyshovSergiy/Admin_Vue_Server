@@ -816,9 +816,6 @@ export default {
                 return this.$t('range') + ' ' + this.$t('not_determined');
             }
         },
-        translate(item) {
-            return this.$t(item);
-        },
         formTitle() {
             return this.editedIndex === -1
                 ? this.$t('new_printing_order')
@@ -855,47 +852,53 @@ export default {
             this.initialize();
         },
         checkChange: async function() {
-            try {
-                this.$refs.form.resetValidation();
-                this.order.zipMask = '';
-                this.order.zipRange = '';
-                this.order.zip_code = '';
-                this.order.zipCharacters = '';
-                this.order.city.latitude = '';
-                this.order.city.longitude = '';
-                this.order.city.state = '';
-                this.order.city.state_abbreviation = '';
-                this.order.city.place_name = '';
-                const local = this.order.country.country_alpha2_code;
-                console.log(api.path('orderMask'));
-                await axios
-                    .post(api.path('orderMask'), {
-                        country_alpha2_code: local
-                    })
-                    .then(response => {
-                        this.order.zipMask = response.data.data.mask;
-                        this.order.zipRange = response.data.data.range;
-                        this.order.zipCharacters = response.data.data.characters;
-                        this.zipGet = true;
-                    })
-                    .catch(e => {
-                        console.log('This is get mask!!! error: ' + e);
-                        this.order.zipMask = '';
-                        this.order.zipRange = '';
-                        this.order.zipCharacters = '';
-                        this.zipGet = false;
-                    });
-            } catch (e) {}
+            if(this.order.country.country_alpha2_code !== '') {
+                try {
+                    this.$refs.form.resetValidation();
+                    this.order.zipMask = '';
+                    this.order.zipRange = '';
+                    this.order.zip_code = '';
+                    this.order.zipCharacters = '';
+                    this.order.city.latitude = '';
+                    this.order.city.longitude = '';
+                    this.order.city.state = '';
+                    this.order.city.state_abbreviation = '';
+                    this.order.city.place_name = '';
+                    this.order.address = '';
+                    this.order.phone = '';
+                    const local = this.order.country.country_alpha2_code;
+                    await axios
+                        .post(api.path('orderMask'), {
+                            country_alpha2_code: local
+                        })
+                        .then(response => {
+                            this.order.zipMask = response.data.data.mask;
+                            this.order.zipRange = response.data.data.range;
+                            this.order.zipCharacters = response.data.data.characters;
+                            this.zipGet = true;
+                        })
+                        .catch(e => {
+                            console.log('This is get mask!!! error: ' + e);
+                            this.order.zipMask = '';
+                            this.order.zipRange = '';
+                            this.order.zipCharacters = '';
+                            this.zipGet = false;
+                        });
+                } catch (e) {
+                    console.log('This is orderMask: ' + e);
+                }
+            }
         },
         checkZipCodeChange: async function() {
-            console.log(
-                Number(this.order.zipCharacters),
-                ' ',
-                this.order.zip_code.length
-            );
+            // console.log(
+            //     Number(this.order.zipCharacters),
+            //     ' ',
+            //     this.order.zip_code.length
+            // );
             if (
                 this.zipGet &&
-                this.order.zip_code.length >= Number(this.order.zipCharacters)
+                this.order.zip_code.length >= Number(this.order.zipCharacters)&&
+                this.order.zip_code.length > 0
             ) {
                 try {
                     this.$refs.form.resetValidation();
@@ -905,14 +908,15 @@ export default {
                     this.order.city.state = '';
                     this.order.city.state_abbreviation = '';
                     this.order.city.place_name = '';
+                    this.order.address = '';
+                    this.order.phone = '';
                     const local = this.order.country.country_alpha2_code;
                     const apiUrlZ =
                         'http://api.zippopotam.us/' +
                         local +
                         '/' +
                         this.order.zip_code;
-                    console.log(apiUrlZ);
-                    await axios
+                    await this.$http
                         .get(apiUrlZ)
                         .then(response => {
                             const self = this;
@@ -939,9 +943,6 @@ export default {
                                 response.data.places[0]['state abbreviation'];
                             this.order.city.place_name =
                                 response.data.places[0]['place name'];
-                            // this.form.state = this.selectCity.state;
-
-                            // console.log('Полный список: ', this.cities);
                         })
                         .catch(e => {
                             console.log('This is get zippopotam error: ' + e);
@@ -1158,28 +1159,37 @@ export default {
         },
         async save() {
             if (this.$refs.form.validate()) {
-                let payload = Object.assign({}, this.items);
-                if (typeof payload.status_id === 'object') {
-                    payload.status_id = payload.status_id.id;
-                } else {
-                    payload.status_id = this.items.status_id;
-                }
-                if (typeof payload.language_id === 'object') {
-                    payload.language_id = payload.language_id.id;
-                } else {
-                    payload.language_id = this.items.language_id;
-                }
-                if (typeof payload.executor_id === 'object') {
-                    payload.executor_id = payload.executor_id.id;
-                } else {
-                    payload.executor_id = this.items.executor_id;
-                }
-                payload.texturing = payload.texturing === '1' ? 1 : 0;
+                let payload = Object.assign({}, this.order);
+                payload.status_id = payload.status.id;
+                delete payload.status;
+                payload.language_id = payload.language.id;
+                delete payload.language;
+                payload.executor_id = payload.executor.id === 0 ? null : payload.executor.id;
+                delete payload.executor;
+                payload.hollow = payload.hollow === '1' ? 1 : 0;
+                payload.support = payload.support === '1' ? 1 : 0;
+                payload.post_processing = payload.post_processing === '1' ? 1 : 0;
+                payload.size_id = payload.size.id;
+                delete payload.size;
+                payload.material = payload.material.id;
+                payload.quality = payload.quality.id;
+                payload.country = payload.country.country_alpha2_code;
+                delete payload.zipMask;
+                delete payload.zipRange;
+                delete payload.zipCharacters;
+                payload.latitude = payload.city.latitude;
+                payload.longitude = payload.city.longitude;
+                payload.state = payload.city.state;
+                payload.state_abbreviation = payload.city.state_abbreviation;
+                payload.city = payload.city.place_name;
+                payload.phone = Number(payload.phone.replace(/[^\d]/g, ''));
+
+                console.log(payload);
                 if (this.editedIndex > -1) {
                     try {
                         await axios
                             .put(
-                                api.path('modeling') + '/' + this.editedIndex,
+                                api.path('printing') + '/' + this.editedIndex,
                                 payload
                             )
                             .then(() => {

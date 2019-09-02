@@ -33,7 +33,7 @@ class PrintingOrderController extends Controller
 
     public function update(ValidateRequest $request, Printing $printing)
     {
-        //
+        return new PrintingResource($this->model->editAdminOrder($request->all(), $printing));
     }
 
     public function destroy(Printing $printing)
