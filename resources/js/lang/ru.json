@@ -179,5 +179,6 @@
     "city": "город",
     "phone_is_required": "Телефон обязателен",
     "phone_number_must_be_digital": "Номер телефона должен быть числом",
-    "phone_number_must_be_10_digits": "Номер телефона должен состоять из 10 цифр"
+    "phone_number_must_be_10_digits": "Номер телефона должен состоять из 10 цифр",
+    "received": "Получен"
 }

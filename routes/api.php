@@ -48,6 +48,15 @@ Route::prefix('v1')->group(function () {
         });
 
     });
+    Route::group(['prefix' => '/order', ['middleware' => 'throttle:20,5']], function () {
+//        Route::post('/modeling', 'Orders\ModelingOrderController@store');
+//        Route::get('/modeling/verify/{token}', 'Orders\ModelingOrderController@verify')->name('modelingOrder.verify');
+//        Route::post('/countries', 'Orders\CountryListController@index');
+        Route::post('/masks', 'Admin\CountryListController@mask');
+//        Route::post('/printing', 'Orders\PrintingOrderController@store');
+//        Route::get('/printing/verify/{token}', 'Orders\PrintingOrderController@verify')->name('printingOrder.verify');
+//        Route::post('/painting', 'Orders\PaintingOrderController@store');
+    });
 
 //    // Site
 //    Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function(){

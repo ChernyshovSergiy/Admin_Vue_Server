@@ -153,13 +153,80 @@ class Printing extends Model
         return collect($order_points);
     }
 
+//    public function getOrder($order)
+//    {
+//        if (!$order->executor_id){
+//            $order->executor_id = 0;
+//        }
+////        $size = [
+////            'id' => $order->size_id,
+////            'value' => Size::where('id','=',$order->size_id)->get('value')
+////        ];
+////        $order = (object) array_merge( (array)$order, $size );
+//        unset($order->latitude, $order->longitude);
+//        return collect($order);
+//    }
+
     public function getOrder($order)
     {
         if (!$order->executor_id){
             $order->executor_id = 0;
         }
-        unset($order->latitude, $order->longitude);
-        return $order;
+        $cLang = 'en';
+        $newOrder = [
+            'id' => $order->id,
+            'name' => $order->name,
+            'email' => $order->email,
+            'link' => $order->link,
+            'size' => [
+                'id'=>$order->size_id,
+                'value'=>$order->getSize()
+            ],
+            'height' => $order->height,
+            'hollow' => $order->hollow,
+            'support' => $order->support,
+            'post_processing' => $order->post_processing,
+            'material' => [
+                'id'=>$order->material,
+                'value'=>''
+//                'value'=>$order->getMaterials()
+            ],
+            'quality' => [
+                'id'=>$order->quality,
+                'value'=>''
+            ],
+            'quantity' => $order->quantity,
+            'country' => [
+                'country_alpha2_code'=>$order->country,
+                'country_name'=>$order->getCountry($order->country)
+            ],
+            'zip_code' => $order->zip_code,
+            'zipMask' => $order->getZipMask($order->country),
+            'zipRange' => $order->getZipRange($order->country),
+            'zipCharacters' => $order->getZipCharacters($order->country),
+            'city' => [
+                'latitude'=> $order->latitude,
+                'longitude'=>$order->longitude,
+                'place_name'=>$order->city,
+                'state'=>$order->state,
+                'state_abbreviation'=>$order->state_abbreviation,
+            ],
+            'address' => $order->address,
+            'phone' => $order->phone,
+            'status' => [
+                'id'=> $order->status_id,
+                'title'=>json_decode($order->status->title, false)->$cLang
+            ],
+            'language' => [
+                'id'=> $order->language_id,
+                'name'=>$order->language->name
+            ],
+            'executor' => [
+                'id'=> $order->executor_id,
+                'name'=> $order->executor['name'] ?: Lang::get('admin.not_assigned')
+            ],
+        ];
+        return collect($newOrder);
     }
 
     public function setUserLanguage($code): void
@@ -361,6 +428,24 @@ class Printing extends Model
     {
         return ($this->quantity !== 0)
             ? number_format($this->quantity, 0, ',', ' ').' '.Lang::get('admin.pieces')
+            : '';
+    }
+    public function getZipMask($al2)
+    {
+        return ($al2 !== '')
+            ? Zippopotam::where('country_alpha2_code','=', $al2)->first()->mask
+            : '';
+    }
+    public function getZipRange($al2)
+    {
+        return ($al2 !== '')
+            ? Zippopotam::where('country_alpha2_code','=', $al2)->first()->range
+            : '';
+    }
+    public function getZipCharacters($al2)
+    {
+        return ($al2 !== '')
+            ? Zippopotam::where('country_alpha2_code','=', $al2)->first()->characters
             : '';
     }
 

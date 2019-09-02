@@ -54,6 +54,10 @@ export const api = Object.assign(new URL(apiUrl), {
         reset: 'reset'
     },
 
+    orderMask: {
+        url: 'order/masks'
+    },
+
     me: 'me',
 
     users: {

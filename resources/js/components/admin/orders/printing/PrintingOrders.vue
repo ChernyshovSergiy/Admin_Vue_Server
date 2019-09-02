@@ -55,7 +55,7 @@
                                         <v-layout wrap>
                                             <v-flex xs12 md6>
                                                 <v-select
-                                                    v-model="items.status_id"
+                                                    v-model="order.status"
                                                     :items="statuses"
                                                     prepend-inner-icon="new_releases"
                                                     :label="`${$t('status')}`"
@@ -71,7 +71,7 @@
                                             </v-flex>
                                             <v-flex xs12 md6>
                                                 <v-select
-                                                    v-model="items.language_id"
+                                                    v-model="order.language"
                                                     :items="languages"
                                                     prepend-inner-icon="g_translate"
                                                     :label="
@@ -91,7 +91,7 @@
                                             </v-flex>
                                             <v-flex xs12>
                                                 <v-text-field
-                                                    v-model="items.link"
+                                                    v-model="order.link"
                                                     prepend-inner-icon="link"
                                                     :label="`${$t('link')}`"
                                                     :hint="
@@ -106,7 +106,7 @@
                                             </v-flex>
                                             <v-flex xs12 md6>
                                                 <v-text-field
-                                                    v-model="items.name"
+                                                    v-model="order.name"
                                                     prepend-inner-icon="person"
                                                     :label="
                                                         `${$t('customer_name')}`
@@ -119,7 +119,7 @@
                                             </v-flex>
                                             <v-flex xs12 md6>
                                                 <v-text-field
-                                                    v-model="items.email"
+                                                    v-model="order.email"
                                                     prepend-inner-icon="email"
                                                     :label="
                                                         `${$t(
@@ -132,7 +132,7 @@
                                             </v-flex>
                                             <v-flex xs12 md4>
                                                 <v-checkbox
-                                                    v-model="items.hollow"
+                                                    v-model="order.hollow"
                                                     :label="
                                                         `${$t('hollow_info')}`
                                                     "
@@ -142,7 +142,7 @@
                                             </v-flex>
                                             <v-flex xs12 md4>
                                                 <v-checkbox
-                                                    v-model="items.support"
+                                                    v-model="order.support"
                                                     :label="
                                                         `${$t('support_info')}`
                                                     "
@@ -153,7 +153,7 @@
                                             <v-flex xs12 md4>
                                                 <v-checkbox
                                                     v-model="
-                                                        items.post_processing
+                                                        order.post_processing
                                                     "
                                                     :label="
                                                         `${$t(
@@ -166,7 +166,7 @@
                                             </v-flex>
                                             <v-flex v-show="!other" xs12>
                                                 <v-select
-                                                    v-model="items.size_id"
+                                                    v-model="order.size"
                                                     :items="sizes"
                                                     prepend-inner-icon="aspect_ratio"
                                                     :label="
@@ -182,7 +182,7 @@
                                             <v-layout v-show="other">
                                                 <v-flex xs12 md6>
                                                     <v-select
-                                                        v-model="items.size_id"
+                                                        v-model="order.size"
                                                         :items="sizes"
                                                         prepend-inner-icon="aspect_ratio"
                                                         :label="
@@ -198,7 +198,7 @@
                                                 <v-flex xs12 md6>
                                                     <v-text-field
                                                         v-model.trim="
-                                                            items.height
+                                                            order.height
                                                         "
                                                         prepend-inner-icon="unfold_less"
                                                         name="height"
@@ -214,21 +214,25 @@
                                             </v-layout>
                                             <v-flex xs12 md6>
                                                 <v-select
-                                                    v-model="items.material"
+                                                    v-model="order.material"
                                                     :items="materials"
                                                     prepend-inner-icon="texture"
                                                     :label="`${$t('material')}`"
                                                     return-object
                                                     item-text="value"
                                                     item-value="id"
-                                                    :hint="`${$t('3d_printing_material')}`"
+                                                    :hint="
+                                                        `${$t(
+                                                            '3d_printing_material'
+                                                        )}`
+                                                    "
                                                     persistent-hint
                                                     :rules="selectMaterialRules"
                                                 />
                                             </v-flex>
                                             <v-flex xs12 md6>
                                                 <v-select
-                                                    v-model="items.quality"
+                                                    v-model="order.quality"
                                                     prepend-inner-icon="high_quality"
                                                     :items="quality"
                                                     item-text="value"
@@ -237,11 +241,13 @@
                                                     :label="`${$t('quality')}`"
                                                     required
                                                     return-object
-                                                ></v-select>
+                                                />
                                             </v-flex>
                                             <v-flex xs12 md6>
                                                 <v-text-field
-                                                    v-model.trim="items.quantity"
+                                                    v-model.trim="
+                                                        order.quantity
+                                                    "
                                                     v-mask="quantityMask"
                                                     prepend-inner-icon="shopping_basket"
                                                     name="quantity"
@@ -253,7 +259,7 @@
                                             </v-flex>
                                             <v-flex xs12 md6>
                                                 <v-select
-                                                    v-model="items.executor_id"
+                                                    v-model="order.executor"
                                                     :items="executors"
                                                     prepend-inner-icon="group"
                                                     :label="`${$t('executor')}`"
@@ -262,33 +268,69 @@
                                                     item-value="id"
                                                 />
                                             </v-flex>
-                                            <v-layout row fill-height justify-center>
-                                                <div class="title font-weight-light mt-3">
-                                                    {{ $t('recipient_address_title') }}
+                                            <v-layout
+                                                row
+                                                fill-height
+                                                justify-center
+                                            >
+                                                <div
+                                                    class="title font-weight-light mt-3"
+                                                >
+                                                    {{
+                                                        $t(
+                                                            'recipient_address_title'
+                                                        )
+                                                    }}
                                                 </div>
                                             </v-layout>
-                                            <v-layout row wrap align-space-around fill-height >
+                                            <v-layout
+                                                row
+                                                wrap
+                                                align-space-around
+                                                fill-height
+                                            >
                                                 <v-flex xs12 sm6>
                                                     <v-autocomplete
-                                                        v-model="items.country"
-                                                        :hint="countryInfo"
+                                                        v-model="
+                                                            order.country
+                                                        "
+                                                        :hint="
+                                                            `${
+                                                                order.country
+                                                                    .country_name
+                                                            }, ${
+                                                                order.country
+                                                                    .country_alpha2_code
+                                                            }`
+                                                        "
                                                         prepend-inner-icon="language"
                                                         :items="countries"
-                                                        :filter="customFilterCountry"
+                                                        :filter="
+                                                            customFilterCountry
+                                                        "
                                                         item-text="country_name"
                                                         item-value="country_alpha2_code"
-                                                        :rules="selectCountryRules"
-                                                        :label="`${$t('country')}`"
+                                                        :rules="
+                                                            selectCountryRules
+                                                        "
+                                                        :label="
+                                                            `${$t('country')}`
+                                                        "
                                                         required
                                                         persistent-hint
                                                         return-object
-                                                    ></v-autocomplete>
+                                                    />
                                                 </v-flex>
                                                 <v-spacer />
                                                 <v-flex xs12 sm6>
                                                     <v-text-field
-                                                        v-model.trim="items.zip_code"
-                                                        :disabled="checkCountrySelect"
+                                                        v-model.trim="
+                                                            order.zip_code
+                                                        "
+                                                        v-mask="order.zipMask"
+                                                        :disabled="
+                                                            checkCountrySelect
+                                                        "
                                                         prepend-inner-icon="flag"
                                                         name="zip"
                                                         :label="`${$t('zip')}`"
@@ -299,42 +341,66 @@
                                                         return-masked-value
                                                         :hint="hintZip"
                                                         persistent-hint
-                                                        :mask="zipMask"
-                                                    >
-                                                    </v-text-field>
+                                                    />
                                                 </v-flex>
                                             </v-layout>
-                                            <v-layout row wrap align-space-around fill-height >
+                                            <v-layout
+                                                row
+                                                wrap
+                                                align-space-around
+                                                fill-height
+                                            >
                                                 <v-flex xs12 sm6>
                                                     <v-text-field
-                                                        v-model.trim="items.state"
-                                                        :disabled="checkZipCodeSelect"
+                                                        v-model.trim="
+                                                            order.city.state
+                                                        "
+                                                        :disabled="
+                                                            checkZipCodeSelect
+                                                        "
                                                         prepend-inner-icon="location_on"
                                                         name="state"
-                                                        :label="`${$t('state')}`"
+                                                        :label="
+                                                            `${$t('state')}`
+                                                        "
                                                         type="state"
-                                                    >
-                                                    </v-text-field>
+                                                    />
                                                 </v-flex>
                                                 <v-spacer />
                                                 <v-flex xs12 sm6>
                                                     <v-text-field
                                                         v-if="!zipGet"
-                                                        v-model.trim="items.city"
-                                                        :disabled="checkZipCodeSelect"
+                                                        v-model.trim="
+                                                            order.city
+                                                                .place_name
+                                                        "
+                                                        :disabled="
+                                                            checkZipCodeSelect
+                                                        "
                                                         prepend-inner-icon="location_city"
                                                         name="city"
                                                         :rules="cityRules"
                                                         :label="`${$t('city')}`"
                                                         type="city"
-                                                    >
-                                                    </v-text-field>
+                                                    />
                                                     <v-select
                                                         v-if="zipGet"
-                                                        v-model.trim="selectCity"
-                                                        :disabled="checkZipCodeSelect"
-                                                        :hint="`${selectCity.place_name},
-                                                         ${selectCity.state_abbreviation}`"
+                                                        v-model.trim="
+                                                            order.city
+                                                        "
+                                                        :disabled="
+                                                            checkZipCodeSelect
+                                                        "
+                                                        :hint="
+                                                            `${
+                                                                order.city
+                                                                    .place_name
+                                                            },
+                                                         ${
+                                                                order.city
+                                                                    .state_abbreviation
+                                                            }`
+                                                        "
                                                         prepend-inner-icon="location_city"
                                                         :items="cities"
                                                         item-text="place_name"
@@ -342,36 +408,51 @@
                                                         required
                                                         persistent-hint
                                                         return-object
-                                                    >
-                                                    </v-select>
+                                                    />
                                                 </v-flex>
                                             </v-layout>
-                                            <v-layout row wrap align-space-around fill-height>
+                                            <v-layout
+                                                row
+                                                wrap
+                                                align-space-around
+                                                fill-height
+                                            >
                                                 <v-flex xs12 sm6>
                                                     <v-text-field
-                                                        v-model.trim="items.address"
-                                                        :disabled="checkZipCodeSelect"
+                                                        v-model.trim="
+                                                            order.address
+                                                        "
+                                                        :disabled="
+                                                            checkZipCodeSelect
+                                                        "
                                                         prepend-inner-icon="where_to_vote"
                                                         name="address"
                                                         :rules="addressRules"
-                                                        :label="`${$t('address')}`"
+                                                        :label="
+                                                            `${$t('address')}`
+                                                        "
                                                         type="address"
-                                                    >
-                                                    </v-text-field>
+                                                    />
                                                 </v-flex>
                                                 <v-spacer />
                                                 <v-flex xs12 sm6>
                                                     <v-text-field
-                                                        v-model.trim="items.phone"
+                                                        v-model.trim="
+                                                            order.phone
+                                                        "
                                                         v-mask="maskPhone"
-                                                        :disabled="checkZipCodeSelect"
+                                                        return-masked-value
+                                                        :disabled="
+                                                            checkZipCodeSelect
+                                                        "
                                                         prepend-icon="phone_iphone"
                                                         name="phone"
                                                         :rules="phoneRules"
-                                                        :label="`${$t('phone')}`"
+                                                        :label="
+                                                            `${$t('phone')}`
+                                                        "
                                                         type="phone"
-                                                    >
-                                                    </v-text-field>
+                                                    />
                                                 </v-flex>
                                             </v-layout>
                                         </v-layout>
@@ -564,25 +645,79 @@ export default {
             statuses: [],
             executors: [],
             countries: [],
+            cities: [],
             items: [],
             sizes: [],
             valid: true,
             editedIndex: -1,
             search: '',
             dialog: false,
+            defaultOrder: {},
+            order: {
+                id: '',
+                name: '',
+                email: '',
+                link: '',
+                size: {
+                    id: 3,
+                    value: '54mm (2 1/4") 1:32'
+                },
+                height: 0,
+                hollow: '1',
+                support: null,
+                post_processing: null,
+                material: {
+                    id: 1,
+                    value: this.$t('plastic')
+                },
+                quality: {
+                    id: 1,
+                    value: '30 ' + this.$t('micron')
+                },
+                quantity: 1,
+                country: {
+                    country_alpha2_code: '',
+                    country_name: ''
+                },
+                zip_code: '',
+                zipMask: '########',
+                zipRange: '',
+                zipCharacters: '8',
+                city: {
+                    latitude: '',
+                    longitude: '',
+                    place_name: '',
+                    state: '',
+                    state_abbreviation: ''
+                },
+                address: '',
+                phone: '0000000000',
+                status: {
+                    id: 2,
+                    title: this.$t('received')
+                },
+                language: {
+                    id: 2,
+                    name: 'Русский'
+                },
+                executor: {
+                    id: 0,
+                    name: this.$t('not_assigned')
+                }
+            },
 
             zipGet: false,
             maskPhone: '(###) ###-##-##',
             quantityMask: '######',
             zipFlag: 'checkChange',
             zipFlagChange: 'checkZipCodeChange',
-            zipMask: '',
-            zipRange: '',
-            zipCharacters: '8',
-            cities: [],
 
-            statusRules: [v => !!v || this.$t('status_is_required')],
-            languageRules: [v => !!v || this.$t('language_is_required')],
+            statusRules: [
+                v => !!v || this.$t('status_is_required')
+            ],
+            languageRules: [
+                v => !!v || this.$t('language_is_required')
+            ],
             nameRules: [
                 v => !!v || this.$t('name_is_required'),
                 v =>
@@ -618,12 +753,18 @@ export default {
                     Number(v) <= 185 ||
                     this.$t('height_must_be_less_185_millimeters')
             ],
-            selectMaterialRules: [v => !!v || this.$t('material_is_required')],
-            selectQualityRules: [v => !!v || this.$t('quality_is_required')],
-            selectCountryRules: [
-                v => v.country_name !== '' || this.$t('country_is_required')
+            selectMaterialRules: [
+                v => !!v || this.$t('material_is_required')
             ],
-            zipRules: [v => !!v || this.$t('zip_is_required')],
+            selectQualityRules: [
+                v => !!v || this.$t('quality_is_required')
+            ],
+            selectCountryRules: [
+                v => !!v || this.$t('country_is_required')
+            ],
+            zipRules: [
+                v => !!v || this.$t('zip_is_required')
+            ],
             quantityRules: [
                 v => !!v || this.$t('quantity_is_required'),
                 v => /^\d+$/.test(v) || this.$t('quantity_must_be_numeric'),
@@ -633,9 +774,9 @@ export default {
             ],
             cityRules: [
                 v => !!v || this.$t('city_is_required'),
-                v =>
-                    /^[a-zA-Z0-9А-Яа-я_]+( [a-zA-Z0-9А-Яа-я_]+)*$/.test(v) ||
-                    this.$t('city_must_be_word'),
+                // v =>
+                //     /^[a-zA-Z0-9А-Яа-я_/-|']+( [a-zA-Z0-9А-Яа-я_/-|']+)*$/.test(v) ||
+                //     this.$t('city_must_be_word'),
                 v =>
                     (v || '').length >= 1 ||
                     this.$t('city_must_be_greater_than_1_characters'),
@@ -643,7 +784,9 @@ export default {
                     (v || '').length <= 90 ||
                     this.$t('city_must_be_less_than_90_characters')
             ],
-            addressRules: [v => !!v || this.$t('address_is_required')],
+            addressRules: [
+                v => !!v || this.$t('address_is_required')
+            ],
             phoneRules: [
                 v => !!v || this.$t('phone_is_required'),
                 v =>
@@ -651,7 +794,8 @@ export default {
                         v
                     ) || this.$t('phone_number_must_be_digital'),
                 v =>
-                    (v || '').length === 15 || this.$t('phone_number_must_be_10_digits')
+                    (v || '').length === 15 ||
+                    this.$t('phone_number_must_be_10_digits')
             ],
             materials: [
                 { id: 1, value: this.$t('plastic') },
@@ -666,8 +810,8 @@ export default {
     },
     computed: {
         hintZip() {
-            if (this.zipRange !== '') {
-                return this.$t('range') + ' ' + this.zipRange;
+            if (this.order.zipRange !== '') {
+                return this.$t('range') + ' ' + this.order.zipRange;
             } else {
                 return this.$t('range') + ' ' + this.$t('not_determined');
             }
@@ -684,48 +828,128 @@ export default {
             return this.$i18n.locale;
         },
         other() {
-            if (typeof this.items.size_id === 'object') {
-                return Number(this.items.size_id.id) === 0;
-            } else {
-                return Number(this.items.size_id) === 0;
-            }
+            return Number(this.order.size.id) === 0;
         },
         dynamicRules() {
-            if (typeof this.items.size_id === 'object') {
-                if (Number(this.items.size_id.id) === 0) {
-                    return this.heightRules;
-                } else {
-                    return [];
-                }
+            if (Number(this.order.size.id) === 0) {
+                return this.heightRules;
             } else {
-                if (Number(this.items.size_id) === 0) {
-                    return this.heightRules;
-                } else {
-                    return [];
-                }
+                return [];
             }
         },
         checkZipCodeSelect() {
-            return this.items.zip_code === '';
+            return this.order.zip_code === '';
         },
         checkCountrySelect() {
-            if (typeof this.items.country === 'object') {
-                return this.items.country.country_name === '';
-            } else {
-                return this.items.country === '';
-            }
+            return this.order.country.country_name === '';
         },
-        countryInfo() {
-            if (typeof this.items.country === 'object') {
-                return this.items.country.country_name + ' (' + this.items.country.country_alpha2_code + ')';
-            } else {
-                return this.items.country;
-            }
-        }
+        checkChange() {
+            return this.order.country.country_alpha2_code + this.order.country.country_name;
+        },
+        checkZipCodeChange() {
+            return this.order.zip_code;
+        },
     },
     watch: {
         cLang() {
             this.initialize();
+        },
+        checkChange: async function() {
+            try {
+                this.$refs.form.resetValidation();
+                this.order.zipMask = '';
+                this.order.zipRange = '';
+                this.order.zip_code = '';
+                this.order.zipCharacters = '';
+                this.order.city.latitude = '';
+                this.order.city.longitude = '';
+                this.order.city.state = '';
+                this.order.city.state_abbreviation = '';
+                this.order.city.place_name = '';
+                const local = this.order.country.country_alpha2_code;
+                console.log(api.path('orderMask'));
+                await axios
+                    .post(api.path('orderMask'), {
+                        country_alpha2_code: local
+                    })
+                    .then(response => {
+                        this.order.zipMask = response.data.data.mask;
+                        this.order.zipRange = response.data.data.range;
+                        this.order.zipCharacters = response.data.data.characters;
+                        this.zipGet = true;
+                    })
+                    .catch(e => {
+                        console.log('This is get mask!!! error: ' + e);
+                        this.order.zipMask = '';
+                        this.order.zipRange = '';
+                        this.order.zipCharacters = '';
+                        this.zipGet = false;
+                    });
+            } catch (e) {}
+        },
+        checkZipCodeChange: async function() {
+            console.log(
+                Number(this.order.zipCharacters),
+                ' ',
+                this.order.zip_code.length
+            );
+            if (
+                this.zipGet &&
+                this.order.zip_code.length >= Number(this.order.zipCharacters)
+            ) {
+                try {
+                    this.$refs.form.resetValidation();
+                    this.cities = [];
+                    this.order.city.latitude = '';
+                    this.order.city.longitude = '';
+                    this.order.city.state = '';
+                    this.order.city.state_abbreviation = '';
+                    this.order.city.place_name = '';
+                    const local = this.order.country.country_alpha2_code;
+                    const apiUrlZ =
+                        'http://api.zippopotam.us/' +
+                        local +
+                        '/' +
+                        this.order.zip_code;
+                    console.log(apiUrlZ);
+                    await axios
+                        .get(apiUrlZ)
+                        .then(response => {
+                            const self = this;
+                            function changeKey(object) {
+                                const position = {};
+                                position.latitude = object.latitude;
+                                position.longitude = object.longitude;
+                                position.state = object.state;
+                                position.state_abbreviation =
+                                    object['state abbreviation'];
+                                position.place_name = object['place name'];
+                                self.cities.push(position);
+                            }
+                            const places = response.data.places;
+
+                            places.forEach(changeKey);
+                            this.order.city.latitude =
+                                response.data.places[0].latitude;
+                            this.order.city.longitude =
+                                response.data.places[0].longitude;
+                            this.order.city.state =
+                                response.data.places[0].state;
+                            this.order.city.state_abbreviation =
+                                response.data.places[0]['state abbreviation'];
+                            this.order.city.place_name =
+                                response.data.places[0]['place name'];
+                            // this.form.state = this.selectCity.state;
+
+                            // console.log('Полный список: ', this.cities);
+                        })
+                        .catch(e => {
+                            console.log('This is get zippopotam error: ' + e);
+                        });
+                } catch (e) {
+                    console.log('This is not enough: ' + e);
+                }
+            }
         }
     },
     created() {
@@ -756,6 +980,9 @@ export default {
             ];
         },
         add() {
+            if(JSON.stringify(this.defaultOrder) === '{}') {
+                Object.assign(this.defaultOrder, this.order);
+            }
             this.getStatuses();
             this.getExecutors();
             this.getLanguages();
@@ -768,7 +995,6 @@ export default {
                     .get(api.path('printings') + '/' + this.cLang)
                     .then(req => {
                         this.printing_orders = req.data.data;
-                        console.log(this.printing_orders);
                     })
                     .catch(e => {
                         console.log('fetchOrdersError: ', e);
@@ -925,7 +1151,9 @@ export default {
             this.dialog = false;
             this.executors = [];
             this.languages = [];
-            this.$refs.form.reset();
+            Object.assign(this.order, this.defaultOrder);
+            this.$refs.form.resetValidation();
+            this.defaultOrder = {};
             this.editedIndex = -1;
         },
         async save() {
@@ -1018,6 +1246,9 @@ export default {
             }
         },
         async editItem(item) {
+            if(JSON.stringify(this.defaultOrder) === '{}') {
+                Object.assign(this.defaultOrder, this.order);
+            }
             this.getStatuses();
             this.getExecutors();
             this.getLanguages();
@@ -1027,22 +1258,22 @@ export default {
                 await axios
                     .get(api.path('printing') + '/' + item)
                     .then(res => {
-                        this.items = Object.assign({}, res.data.data);
-                        this.items.hollow =
-                            this.items.hollow === 1 ? '1' : null;
-                        this.items.support =
-                            this.items.support === 1 ? '1' : null;
-                        this.items.post_processing =
-                            this.items.post_processing === 1 ? '1' : null;
+                        this.order = Object.assign({}, res.data.data);
+                        this.order.hollow =
+                            this.order.hollow === 1 ? '1' : null;
+                        this.order.support =
+                            this.order.support === 1 ? '1' : null;
+                        this.order.post_processing =
+                            this.order.post_processing === 1 ? '1' : null;
                         let self = this;
-                        let user_id = this.items.executor_id;
+                        let user_id = this.order.executor.id;
                         let user = self.executors.some(function(executor) {
                             return executor.id === user_id;
                         });
                         if (!user && user_id !== null) {
                             this.getExecutor(user_id);
                         }
-                        let lang_id = this.items.language_id;
+                        let lang_id = this.order.language.id;
                         let lang = self.languages.some(function(language) {
                             return language.id === lang_id;
                         });

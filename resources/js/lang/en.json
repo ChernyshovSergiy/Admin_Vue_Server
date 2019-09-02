@@ -179,5 +179,6 @@
     "city": "City",
     "phone_is_required": "Phone is required",
     "phone_number_must_be_digital": "Phone number must be digital",
-    "phone_number_must_be_10_digits": "Phone number must be 10 digits"
+    "phone_number_must_be_10_digits": "Phone number must be 10 digits",
+    "received": "Received"
 }
