@@ -23,7 +23,8 @@ class VerifyMail extends Mailable
     public function build()
     {
         return $this->subject(Lang::get('mail.printing_order_confirmation'))
-            ->markdown('emails/order/printing/verify');
+            ->markdown('emails/order/printing/verify')
+            ->with( 'urlFrontEnd', [ 'urlFrontEnd' => env('FRONT_URL') ] );
     }
 
 }

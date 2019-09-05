@@ -121,7 +121,7 @@ trait BuildJson
         foreach ($menu_blocks as $key => $name){
             $section = 'section'. (string)($key + 1);
             LaravelLocalization::setLocale($this->language);
-            $lang_name = Lang::get('sections.'.$name);
+            $lang_name = Lang::get('blocks.'.$name);
 
             $text = array();
             foreach($menus as $i => $title)

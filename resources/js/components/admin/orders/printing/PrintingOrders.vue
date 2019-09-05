@@ -291,9 +291,7 @@
                                             >
                                                 <v-flex xs12 sm6>
                                                     <v-autocomplete
-                                                        v-model="
-                                                            order.country
-                                                        "
+                                                        v-model="order.country"
                                                         :hint="
                                                             `${
                                                                 order.country
@@ -396,10 +394,10 @@
                                                                 order.city
                                                                     .place_name
                                                             },
-                                                         ${
-                                                                order.city
-                                                                    .state_abbreviation
-                                                            }`
+                                                             ${
+                                                                 order.city
+                                                                     .state_abbreviation
+                                                             }`
                                                         "
                                                         prepend-inner-icon="location_city"
                                                         :items="cities"
@@ -652,8 +650,22 @@ export default {
             editedIndex: -1,
             search: '',
             dialog: false,
-            defaultOrder: {},
             order: {
+                size: {
+                    id: 3,
+                    value: '54mm (2 1/4") 1:32'
+                },
+                height: 0,
+                zip_code: '',
+                zipMask: '########',
+                zipRange: '',
+                zipCharacters: '8',
+                country: {
+                    country_alpha2_code: '',
+                    country_name: ''
+                }
+            },
+            defaultOrder: {
                 id: '',
                 name: '',
                 email: '',
@@ -711,13 +723,10 @@ export default {
             quantityMask: '######',
             zipFlag: 'checkChange',
             zipFlagChange: 'checkZipCodeChange',
+            getOrder: false,
 
-            statusRules: [
-                v => !!v || this.$t('status_is_required')
-            ],
-            languageRules: [
-                v => !!v || this.$t('language_is_required')
-            ],
+            statusRules: [v => !!v || this.$t('status_is_required')],
+            languageRules: [v => !!v || this.$t('language_is_required')],
             nameRules: [
                 v => !!v || this.$t('name_is_required'),
                 v =>
@@ -753,18 +762,10 @@ export default {
                     Number(v) <= 185 ||
                     this.$t('height_must_be_less_185_millimeters')
             ],
-            selectMaterialRules: [
-                v => !!v || this.$t('material_is_required')
-            ],
-            selectQualityRules: [
-                v => !!v || this.$t('quality_is_required')
-            ],
-            selectCountryRules: [
-                v => !!v || this.$t('country_is_required')
-            ],
-            zipRules: [
-                v => !!v || this.$t('zip_is_required')
-            ],
+            selectMaterialRules: [v => !!v || this.$t('material_is_required')],
+            selectQualityRules: [v => !!v || this.$t('quality_is_required')],
+            selectCountryRules: [v => !!v || this.$t('country_is_required')],
+            zipRules: [v => !!v || this.$t('zip_is_required')],
             quantityRules: [
                 v => !!v || this.$t('quantity_is_required'),
                 v => /^\d+$/.test(v) || this.$t('quantity_must_be_numeric'),
@@ -784,9 +785,7 @@ export default {
                     (v || '').length <= 90 ||
                     this.$t('city_must_be_less_than_90_characters')
             ],
-            addressRules: [
-                v => !!v || this.$t('address_is_required')
-            ],
+            addressRules: [v => !!v || this.$t('address_is_required')],
             phoneRules: [
                 v => !!v || this.$t('phone_is_required'),
                 v =>
@@ -841,51 +840,69 @@ export default {
             return this.order.country.country_name === '';
         },
         checkChange() {
-            return this.order.country.country_alpha2_code + this.order.country.country_name;
+            return (
+                this.order.country.country_alpha2_code +
+                this.order.country.country_name
+            );
         },
         checkZipCodeChange() {
             return this.order.zip_code;
-        },
+        }
     },
     watch: {
         cLang() {
             this.initialize();
         },
         checkChange: async function() {
-            if(this.order.country.country_alpha2_code !== '') {
-                try {
-                    this.$refs.form.resetValidation();
-                    this.order.zipMask = '';
-                    this.order.zipRange = '';
-                    this.order.zip_code = '';
-                    this.order.zipCharacters = '';
-                    this.order.city.latitude = '';
-                    this.order.city.longitude = '';
-                    this.order.city.state = '';
-                    this.order.city.state_abbreviation = '';
-                    this.order.city.place_name = '';
-                    this.order.address = '';
-                    this.order.phone = '';
-                    const local = this.order.country.country_alpha2_code;
-                    await axios
-                        .post(api.path('orderMask'), {
-                            country_alpha2_code: local
-                        })
-                        .then(response => {
-                            this.order.zipMask = response.data.data.mask;
-                            this.order.zipRange = response.data.data.range;
-                            this.order.zipCharacters = response.data.data.characters;
-                            this.zipGet = true;
-                        })
-                        .catch(e => {
-                            console.log('This is get mask!!! error: ' + e);
+            if (this.dialog) {
+                if (!this.getOrder) {
+                    if (
+                        this.order.country.country_alpha2_code !== '' &&
+                        this.editedIndex === -1
+                    ) {
+                        try {
+                            this.$refs.form.resetValidation();
                             this.order.zipMask = '';
                             this.order.zipRange = '';
+                            this.order.zip_code = '';
                             this.order.zipCharacters = '';
-                            this.zipGet = false;
-                        });
-                } catch (e) {
-                    console.log('This is orderMask: ' + e);
+                            this.order.city.latitude = '';
+                            this.order.city.longitude = '';
+                            this.order.city.state = '';
+                            this.order.city.state_abbreviation = '';
+                            this.order.city.place_name = '';
+                            this.order.address = '';
+                            this.order.phone = '';
+                            const local = this.order.country
+                                .country_alpha2_code;
+                            await axios
+                                .post(api.path('orderMask'), {
+                                    country_alpha2_code: local
+                                })
+                                .then(response => {
+                                    this.order.zipMask =
+                                        response.data.data.mask;
+                                    this.order.zipRange =
+                                        response.data.data.range;
+                                    this.order.zipCharacters =
+                                        response.data.data.characters;
+                                    this.zipGet = true;
+                                })
+                                .catch(e => {
+                                    console.log(
+                                        'This is get mask!!! error: ' + e
+                                    );
+                                    this.order.zipMask = '';
+                                    this.order.zipRange = '';
+                                    this.order.zipCharacters = '';
+                                    this.zipGet = false;
+                                });
+                        } catch (e) {
+                            console.log('This is orderMask: ' + e);
+                        }
+                    }
+                } else {
+                    this.getOrder = true;
                 }
             }
         },
@@ -895,60 +912,75 @@ export default {
             //     ' ',
             //     this.order.zip_code.length
             // );
-            if (
-                this.zipGet &&
-                this.order.zip_code.length >= Number(this.order.zipCharacters)&&
-                this.order.zip_code.length > 0
-            ) {
-                try {
-                    this.$refs.form.resetValidation();
-                    this.cities = [];
-                    this.order.city.latitude = '';
-                    this.order.city.longitude = '';
-                    this.order.city.state = '';
-                    this.order.city.state_abbreviation = '';
-                    this.order.city.place_name = '';
-                    this.order.address = '';
-                    this.order.phone = '';
-                    const local = this.order.country.country_alpha2_code;
-                    const apiUrlZ =
-                        'http://api.zippopotam.us/' +
-                        local +
-                        '/' +
-                        this.order.zip_code;
-                    await this.$http
-                        .get(apiUrlZ)
-                        .then(response => {
-                            const self = this;
-                            function changeKey(object) {
-                                const position = {};
-                                position.latitude = object.latitude;
-                                position.longitude = object.longitude;
-                                position.state = object.state;
-                                position.state_abbreviation =
-                                    object['state abbreviation'];
-                                position.place_name = object['place name'];
-                                self.cities.push(position);
-                            }
-                            const places = response.data.places;
+            if (this.dialog) {
+                if (this.getOrder) {
+                    if (
+                        this.zipGet &&
+                        this.order.zip_code.length > 0 &&
+                        this.order.zip_code.length >= Number(this.order.zipCharacters)
+                    ) {
+                        console.log('getOrder: ', this.getOrder);
+                        try {
+                            this.$refs.form.resetValidation();
+                            this.cities = [];
+                            this.order.city.latitude = '';
+                            this.order.city.longitude = '';
+                            this.order.city.state = '';
+                            this.order.city.state_abbreviation = '';
+                            this.order.city.place_name = '';
+                            this.order.address = '';
+                            this.order.phone = '';
+                            const local = this.order.country
+                                .country_alpha2_code;
+                            const apiUrlZ =
+                                'http://api.zippopotam.us/' +
+                                local +
+                                '/' +
+                                this.order.zip_code;
+                            await this.$http
+                                .get(apiUrlZ)
+                                .then(response => {
+                                    const self = this;
 
-                            places.forEach(changeKey);
-                            this.order.city.latitude =
-                                response.data.places[0].latitude;
-                            this.order.city.longitude =
-                                response.data.places[0].longitude;
-                            this.order.city.state =
-                                response.data.places[0].state;
-                            this.order.city.state_abbreviation =
-                                response.data.places[0]['state abbreviation'];
-                            this.order.city.place_name =
-                                response.data.places[0]['place name'];
-                        })
-                        .catch(e => {
-                            console.log('This is get zippopotam error: ' + e);
-                        });
-                } catch (e) {
-                    console.log('This is not enough: ' + e);
+                                    function changeKey(object) {
+                                        const position = {};
+                                        position.latitude = object.latitude;
+                                        position.longitude = object.longitude;
+                                        position.state = object.state;
+                                        position.state_abbreviation =
+                                            object['state abbreviation'];
+                                        position.place_name =
+                                            object['place name'];
+                                        self.cities.push(position);
+                                    }
+
+                                    const places = response.data.places;
+
+                                    places.forEach(changeKey);
+                                    this.order.city.latitude =
+                                        response.data.places[0].latitude;
+                                    this.order.city.longitude =
+                                        response.data.places[0].longitude;
+                                    this.order.city.state =
+                                        response.data.places[0].state;
+                                    this.order.city.state_abbreviation =
+                                        response.data.places[0]['state abbreviation'];
+                                    this.order.city.place_name =
+                                        response.data.places[0]['place name'];
+                                })
+                                .catch(e => {
+                                    console.log(
+                                        'This is get zippopotam error: ' + e
+                                    );
+                                });
+                        } catch (e) {
+                            console.log('This is not enough: ' + e);
+                        }
+                    }
+                } else {
+                    if(this.order.zip_code !== '') {
+                        this.getOrder = true;
+                    }
                 }
             }
         }
@@ -956,6 +988,7 @@ export default {
     created() {
         this.initialize();
         this.getCountryList();
+        Object.assign(this.order, this.defaultOrder);
     },
 
     methods: {
@@ -981,14 +1014,16 @@ export default {
             ];
         },
         add() {
-            if(JSON.stringify(this.defaultOrder) === '{}') {
-                Object.assign(this.defaultOrder, this.order);
-            }
+            // if(JSON.stringify(this.defaultOrder) === '{}') {
+            //     Object.assign(this.defaultOrder, this.order);
+            // }
+            Object.assign(this.order, this.defaultOrder);
             this.getStatuses();
             this.getExecutors();
             this.getLanguages();
             this.getCountryList();
             this.getCollectionSizes();
+            // this.$refs.form.resetValidation();
         },
         async initialize() {
             try {
@@ -1081,7 +1116,7 @@ export default {
         async getExecutors() {
             try {
                 await axios
-                    .get(api.path('executors') + '/' + 'modeling')
+                    .get(api.path('executors') + '/' + 'printing')
                     .then(req => {
                         this.executors = req.data.data;
                         this.executors.push({
@@ -1150,11 +1185,11 @@ export default {
         },
         close() {
             this.dialog = false;
+            this.getOrder = false;
             this.executors = [];
             this.languages = [];
             Object.assign(this.order, this.defaultOrder);
             this.$refs.form.resetValidation();
-            this.defaultOrder = {};
             this.editedIndex = -1;
         },
         async save() {
@@ -1164,11 +1199,13 @@ export default {
                 delete payload.status;
                 payload.language_id = payload.language.id;
                 delete payload.language;
-                payload.executor_id = payload.executor.id === 0 ? null : payload.executor.id;
+                payload.executor_id =
+                    payload.executor.id === 0 ? null : payload.executor.id;
                 delete payload.executor;
                 payload.hollow = payload.hollow === '1' ? 1 : 0;
                 payload.support = payload.support === '1' ? 1 : 0;
-                payload.post_processing = payload.post_processing === '1' ? 1 : 0;
+                payload.post_processing =
+                    payload.post_processing === '1' ? 1 : 0;
                 payload.size_id = payload.size.id;
                 delete payload.size;
                 payload.material = payload.material.id;
@@ -1223,7 +1260,7 @@ export default {
                 } else {
                     try {
                         await axios
-                            .post(api.path('modeling'), payload)
+                            .post(api.path('printing'), payload)
                             .then(() => {
                                 this.initialize();
                                 this.$refs.form.reset();
@@ -1256,9 +1293,7 @@ export default {
             }
         },
         async editItem(item) {
-            if(JSON.stringify(this.defaultOrder) === '{}') {
-                Object.assign(this.defaultOrder, this.order);
-            }
+            this.getOrder = false;
             this.getStatuses();
             this.getExecutors();
             this.getLanguages();
@@ -1320,7 +1355,7 @@ export default {
                 .then(result => {
                     if (result.value) {
                         axios
-                            .delete(api.path('modeling') + '/' + item)
+                            .delete(api.path('printing') + '/' + item)
                             .then(() => {
                                 this.initialize();
 

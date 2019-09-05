@@ -21,9 +21,9 @@ class PrintingOrderController extends Controller
         return PrintingResource::collection($this->model->getConfirmPrintingOrdersByLang($cLang));
     }
 
-    public function store(ValidateRequest $request)
+    public function store(ValidateRequest $request): PrintingResource
     {
-        //
+        return new PrintingResource($this->model::adminAddNewPrintingOrder($request->all()));
     }
 
     public function show(Printing $printing): PrintingResource

@@ -141,7 +141,7 @@ class Printing extends Model
                 'email' => $order->email,
                 'map_link' => $order->getMapLink(),
                 'position' => $order->getAddress(),
-                'phone' => $order->getPhone($order->phone),
+                'phone' => $order->getPhoneCode($order->phone),
                 'option' => $order->hollow.$order->support.$order->post_processing,
                 'size' => $order->getSize(),
                 'print_material' => $order->getMaterials(),
@@ -152,20 +152,6 @@ class Printing extends Model
         }
         return collect($order_points);
     }
-
-//    public function getOrder($order)
-//    {
-//        if (!$order->executor_id){
-//            $order->executor_id = 0;
-//        }
-////        $size = [
-////            'id' => $order->size_id,
-////            'value' => Size::where('id','=',$order->size_id)->get('value')
-////        ];
-////        $order = (object) array_merge( (array)$order, $size );
-//        unset($order->latitude, $order->longitude);
-//        return collect($order);
-//    }
 
     public function getOrder($order)
     {
@@ -212,7 +198,7 @@ class Printing extends Model
                 'state_abbreviation'=>$order->state_abbreviation,
             ],
             'address' => $order->address,
-            'phone' => $order->phone,
+            'phone' => $order->getPhone($order->phone),
             'status' => [
                 'id'=> $order->status_id,
                 'title'=>json_decode($order->status->title, false)->$cLang
@@ -279,11 +265,21 @@ class Printing extends Model
 
     }
 
-    public static function adminAddNewPrintingOrder($fields) :void
+    public static function adminAddNewPrintingOrder($fields)
     {
         $order = new static;
-        $order->fill($fields->all());
+        $order->fill($fields);
+        if($order->executor_id === 0){
+            $order->executor_id = null;
+        }
+        if($order->status_id === 2){
+            $order->generateToken();
+            $lang = $order->language->code;
+            LaravelLocalization::setLocale($lang);
+            Mail::to($order)->send(new VerifyMail($order));
+        }
         $order->save();
+        return $order;
     }
 
     public function editPrintingOrder($request, $id): void
@@ -362,14 +358,29 @@ class Printing extends Model
         return $countries[$al2];
     }
 
+    public function getPhoneCode($number): string
+    {
+        if ($number){
+            $code_number = Phone::where('country_alpha2_code', '=', $this->country)
+                ->first()['code'];
+            $tel_num = (string)$number;
+            return '+'.$code_number.'('
+                .substr($tel_num,0,3)
+                .') '
+                .substr($tel_num,3,3)
+                .'-'
+                .substr($tel_num,-4,-2)
+                .'-'
+                .substr($tel_num,8,10);
+        }
+        return '';
+    }
+
     public function getPhone($number): string
     {
         if ($number){
-            $code_number = Phone::all()
-                ->where('country_alpha2_code', '=', $this->country)
-                ->first()->code;
             $tel_num = (string)$number;
-            return '+'.$code_number.'('
+            return '('
                 .substr($tel_num,0,3)
                 .') '
                 .substr($tel_num,3,3)

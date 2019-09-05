@@ -49,44 +49,49 @@ Route::prefix('v1')->group(function () {
 
     });
     Route::group(['prefix' => '/order', ['middleware' => 'throttle:20,5']], function () {
-//        Route::post('/modeling', 'Orders\ModelingOrderController@store');
-//        Route::get('/modeling/verify/{token}', 'Orders\ModelingOrderController@verify')->name('modelingOrder.verify');
-//        Route::post('/countries', 'Orders\CountryListController@index');
-        Route::post('/masks', 'Admin\CountryListController@mask');
-//        Route::post('/printing', 'Orders\PrintingOrderController@store');
-//        Route::get('/printing/verify/{token}', 'Orders\PrintingOrderController@verify')->name('printingOrder.verify');
-//        Route::post('/painting', 'Orders\PaintingOrderController@store');
+        Route::group(['namespace' => 'Admin'], static function (){
+            Route::post('/masks', 'CountryListController@mask');
+        });
     });
 
-//    // Site
-//    Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function(){
-//        Route::post('/register', 'Auth\RegisterController@site_register');
-//        Route::post('/login', 'Auth\LoginController@site_login');
-//        // Send reset password mail
-//        Route::post('reset-password', 'AuthController@sendPasswordResetLink');
-//        // handle reset password form process
-//        Route::post('reset/password', 'AuthController@callResetPassword');
-//    });
-//
-//    Route::group(['middleware' => 'jwt.auth'], function () {
-//        Route::get('/user', 'MeController@index');
-//        Route::get('/auth/logout', 'MeController@logout');
-//    });
-//
-//    Route::group(['prefix' => '/page', ['middleware' => 'throttle:20,5']], function () {
-//        Route::post('/contents', 'Pages\ContentPageController@content');
-//        Route::post('/menus', 'Pages\MenuPageController@menu');
-//        Route::get('/languages', 'Pages\languagesController@index');
-//    });
-//
-//    Route::group(['prefix' => '/order', ['middleware' => 'throttle:20,5']], function () {
-//        Route::post('/modeling', 'Orders\ModelingOrderController@store');
-//        Route::get('/modeling/verify/{token}', 'Orders\ModelingOrderController@verify')->name('modelingOrder.verify');
-//        Route::post('/countries', 'Orders\CountryListController@index');
-//        Route::post('/masks', 'Orders\CountryListController@mask');
-//        Route::post('/printing', 'Orders\PrintingOrderController@store');
-//        Route::get('/printing/verify/{token}', 'Orders\PrintingOrderController@verify')->name('printingOrder.verify');
-////        Route::post('/painting', 'Orders\PaintingOrderController@store');
-//    });
+    // Site
+    Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function(){
+        Route::group(['namespace' => 'Auth\Front'], static function () {
+            Route::post('/register', 'RegisterController@register');
+            Route::post('/login', 'LoginController@login');
+            // Send reset password mail
+            Route::post('reset-password', 'AuthController@sendPasswordResetLink');
+            // handle reset password form process
+            Route::post('reset/password', 'AuthController@callResetPassword');
+        });
+
+    });
+
+    Route::group(['middleware' => 'jwt.auth'], function () {
+        Route::group(['namespace' => 'Auth\Front'], static function () {
+            Route::get('/user', 'MeController@index');
+            Route::get('/auth/logout', 'MeController@logout');
+        });
+    });
+
+    Route::group(['prefix' => '/page', ['middleware' => 'throttle:20,5']], function () {
+        Route::group(['namespace' => 'Pages'], static function () {
+            Route::post('/contents', 'ContentPageController@content');
+            Route::post('/menus', 'MenuPageController@menu');
+            Route::get('/languages', 'languagesController@index');
+        });
+    });
+
+    Route::group(['prefix' => '/order', ['middleware' => 'throttle:20,5']], function () {
+        Route::group(['namespace' => 'Orders'], static function () {
+            Route::post('/modeling', 'ModelingOrderController@store');
+            Route::get('/modeling/verify/{token}', 'ModelingOrderController@verify')->name('modelingOrder.verify');
+            Route::get('/countries/{cLang}', 'CountryListController@index');
+            Route::post('/masks', 'CountryListController@mask');
+            Route::post('/printing', 'PrintingOrderController@store');
+            Route::get('/printing/verify/{token}', 'PrintingOrderController@verify')->name('printingOrder.verify');
+        //        Route::post('/painting', 'PaintingOrderController@store');
+        });
+    });
 });
 
