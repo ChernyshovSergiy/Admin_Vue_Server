@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\Orders;
 
+use App\Http\Resources\Country as CountryResource;
 use App\Models\Country;
 use App\Models\Zippopotam;
 use Illuminate\Http\Request;
@@ -17,15 +18,21 @@ class CountryListController extends Controller
         $this->model = $country;
         $this->mask = $mask;
     }
-    public function index(Request $request)
+    public function index($cLang): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        $countries = $this->model->getCountryListByLanguages($request);
+        return CountryResource::collection($this->model->getCountryListByLanguages($cLang));
 
-        return response()->json([
-            'success' => true,
-            'data' => $countries
-        ]);
     }
+//    public function index(Request $request)
+//    {
+//        $countries = $this->model->getCountryListByLanguages($request);
+//
+//        return response()->json([
+//            'success' => true,
+//            'data' => $countries
+//        ]);
+//    }
+
     public function mask(Request $request)
     {
         $masks = $this->mask->getCountryZipCodeMask($request);

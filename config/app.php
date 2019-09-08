@@ -80,7 +80,13 @@ return [
     */
 
     'locale' => 'en',
-    'locales' => ['en' => 'English', 'ru' => 'Russian', 'ua' => 'Ukraine'],
+    'locales' => [
+        'en' => 'English',
+        'ru' => 'Russian',
+        'uk' => 'Ukraine',
+        'es' => 'Spanish',
+        'de' => 'Dutch'
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -152,6 +158,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -210,6 +217,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
 
     ],
 

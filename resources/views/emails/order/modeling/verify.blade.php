@@ -4,7 +4,8 @@
 # @lang(Lang::get('mail.hello').' '.$mod_order->name)!<br>
 @lang(Lang::get('mail.your_make_modeling_order'))<br>
 @lang(Lang::get('mail.click_to_link_modeling_order'))<br>
-@component('mail::button', ['url' => env('FRONT_URL').'modeling_order/'.$mod_order->verify_token])
+{{--@component('mail::button', ['url' => env('FRONT_URL').'modeling_order/'.$mod_order->verify_token])--}}
+@component('mail::button', ['url' => env('FRONT_URL', 'http://127.0.0.1:3000/').'modeling_order/'.$mod_order->verify_token])
     {{ Lang::get('mail.verify_modeling_order')  }}
 @endcomponent
 @lang(Lang::get('mail.thank_for_using'))<br>

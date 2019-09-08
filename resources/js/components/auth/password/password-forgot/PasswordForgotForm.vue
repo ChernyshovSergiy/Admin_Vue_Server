@@ -2,7 +2,7 @@
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit">
         <v-text-field
             v-model="form.email"
-            :label="labels.email"
+            :label="`${$t('email')}`"
             type="email"
             :error-messages="errors.email"
             :rules="[rules.required('email')]"
@@ -48,7 +48,9 @@ export default {
     data: () => ({
         form: {
             email: null
-        }
+        },
+        valid: true,
+        loading: false,
     }),
 
     created() {

@@ -24,14 +24,16 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = request(['email', 'password']);
+        $user = User::where('email', request('email'))->get()->first();
+//        dd($user->status);
 
-        if (!$token = auth()->attempt($credentials)) {
+        if (!$token = auth('api')->attempt($credentials)) {
             return response()->json(['message' => 'Invalid login credential.'], 401);
         }
 
         $user = $request->user();
 
-        return response()->json(compact('token', 'user'));
+        return response()->json(compact('token',  'user'));
     }
 
     public function refresh()

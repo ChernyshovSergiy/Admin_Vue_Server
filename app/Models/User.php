@@ -44,7 +44,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $hidden = [
-        'password',
+        'password', 'remember_token', 'api_token'
     ];
 
     public static function generatePassword($length = 32)

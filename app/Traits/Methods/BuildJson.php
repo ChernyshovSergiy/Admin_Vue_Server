@@ -6,6 +6,7 @@ use App\Models\Language;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Lang;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Traits\Methods\LanguagesFilter;
 
 trait BuildJson
 {
@@ -107,9 +108,14 @@ trait BuildJson
         return $text;
     }
 
-    public function buildMenuOneLang($model, $column, $language) :array
+    public function buildMenuOneLang($model, $column, $language)
     {
         $menus = $this->build($model, $column)->where('is_active','=',1)->flatten();
+
+        $active_lang = Language::all()->where('is_active', '=','1');
+        if (!$language || !$active_lang->contains('code', $language)){
+            $language = 'en';
+        }
         $this->language = $language;
         $this->model = $model;
         if (!$menus){
@@ -120,8 +126,9 @@ trait BuildJson
         $full_value = array();
         foreach ($menu_blocks as $key => $name){
             $section = 'section'. (string)($key + 1);
-            LaravelLocalization::setLocale($this->language);
+            LaravelLocalization::setLocale(($this->language === 'ua') ? 'uk' : $this->language);
             $lang_name = Lang::get('blocks.'.$name);
+//            dd(LaravelLocalization::getSupportedLocales());
 
             $text = array();
             foreach($menus as $i => $title)
@@ -138,7 +145,7 @@ trait BuildJson
             $full_value = Arr::add($full_value, $section, $value);
         }
 
-        return $full_value;
+        return collect($full_value);
     }
 
     public function setJson($request, $text_blocks) :string

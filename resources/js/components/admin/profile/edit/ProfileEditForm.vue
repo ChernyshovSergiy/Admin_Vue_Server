@@ -30,7 +30,7 @@
             <v-card-text>
                 <v-text-field
                     v-model="form.password"
-                    :label="`${$t(label.password)}`"
+                    :label="`${$t('password')}`"
                     :append-icon="
                         passwordHidden ? 'visibility_off' : 'visibility'
                     "
@@ -44,7 +44,7 @@
 
                 <v-text-field
                     v-model="form.password_confirmation"
-                    :label="`${$t(label.password_confirmation)}`"
+                    :label="`${$t('password_confirmation')}`"
                     :type="passwordHidden ? 'password' : 'text'"
                     :error-messages="errors.password_confirmation"
                     :disabled="loading"
@@ -91,6 +91,7 @@ export default {
 
     data: () => ({
         passwordHidden: true,
+        loading: false,
 
         label: {
             password: 'password',

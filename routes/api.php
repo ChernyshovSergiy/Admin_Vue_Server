@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function () {
         Route::post('register', 'Auth\RegisterController@register');
     });
 
-    Route::group(['middleware' => ['jwt', 'cLang']], function() {
+    Route::group(['middleware' => ['jwt.auth', 'cLang']], function() {
         Route::group(['namespace' => 'Auth'], function (){
             Route::post('logout', 'LoginController@logout');
             Route::get('me', 'LoginController@me');
@@ -77,7 +77,7 @@ Route::prefix('v1')->group(function () {
     Route::group(['prefix' => '/page', ['middleware' => 'throttle:20,5']], function () {
         Route::group(['namespace' => 'Pages'], static function () {
             Route::post('/contents', 'ContentPageController@content');
-            Route::post('/menus', 'MenuPageController@menu');
+            Route::get('/menus/{cLang}', 'MenuPageController@menu');
             Route::get('/languages', 'languagesController@index');
         });
     });

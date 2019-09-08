@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -27,6 +28,9 @@ class ProfileController extends Controller
 
         if ($request->input('password')) {
             $user->password = bcrypt($request->input('password'));
+        }
+        if (!$user->api_token) {
+            $user->api_token = Str::random(60);
         }
 
         $user->save();

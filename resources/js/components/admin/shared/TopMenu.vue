@@ -90,10 +90,10 @@ export default {
         light: false,
         languages: [
             { flagCountry: 'gb', language: 'en', title: 'English' },
-            { flagCountry: 'ru', language: 'ru', title: 'Русский' }
-            // { flagCountry: 'es', language: 'es', title: 'Español' },
-            // { flagCountry: 'ua', language: 'ua', title: 'Український' },
-            // { flagCountry: 'de', language: 'de', title: 'Deutsch' },
+            { flagCountry: 'ru', language: 'ru', title: 'Русский' },
+            { flagCountry: 'es', language: 'es', title: 'Español' },
+            { flagCountry: 'ua', language: 'ua', title: 'Український' },
+            { flagCountry: 'de', language: 'de', title: 'Deutsch' },
             // { flagCountry: 'it', language: 'it', title: 'Italiano' },
             // { flagCountry: 'fr', language: 'fr', title: 'Le français' },
             // { flagCountry: 'sa', language: 'sa', title: 'العربية' },

@@ -2,7 +2,7 @@
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit">
         <v-text-field
             v-model="form.name"
-            :label="labels.name"
+            :label="`${$t('name')}`"
             :error-messages="errors.name"
             :rules="[rules.required('name')]"
             :disabled="loading"
@@ -10,7 +10,7 @@
 
         <v-text-field
             v-model="form.email"
-            :label="labels.email"
+            :label="`${$t('email')}`"
             type="email"
             :error-messages="errors.email"
             :rules="[rules.required('email')]"
@@ -20,7 +20,7 @@
 
         <v-text-field
             v-model="form.password"
-            :label="`${$t(labels.password)}`"
+            :label="`${$t('password')}`"
             :append-icon="passwordHidden ? 'visibility_off' : 'visibility'"
             :type="passwordHidden ? 'password' : 'text'"
             :error-messages="errors.password"
@@ -33,11 +33,12 @@
 
         <v-text-field
             v-model="form.password_confirmation"
-            :label="`${$t(labels.password_confirmation)}`"
+            :label="`${$t('password_confirmation')}`"
             :type="passwordHidden ? 'password' : 'text'"
             :error-messages="errors.password_confirmation"
             :disabled="loading"
             :rules="[rules.required('password_confirmation')]"
+            autocomplete="new-password"
         />
 
         <v-layout row class="mt-4 mx-0">
@@ -77,6 +78,8 @@ export default {
 
     data: () => ({
         passwordHidden: true,
+        valid: true,
+        loading: false,
 
         form: {
             name: null,
