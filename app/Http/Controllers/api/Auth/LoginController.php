@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class LoginController extends Controller
 {
@@ -25,15 +28,17 @@ class LoginController extends Controller
     {
         $credentials = request(['email', 'password']);
         $user = User::where('email', request('email'))->get()->first();
-//        dd($user->status);
+        if (is_object($user) && (int)$user->status[7] === 1){
+                if (!$token = auth('api')->attempt($credentials)) {
+                    return response()->json(['message' => 'Invalid login credential.'], 401);
+                }
 
-        if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['message' => 'Invalid login credential.'], 401);
+                $user = $request->user();
+
+                return response()->json(compact('token',  'user'));
         }
-
-        $user = $request->user();
-
-        return response()->json(compact('token',  'user'));
+        LaravelLocalization::setLocale($request->get('cLang'));
+        return response()->json(['message' => Lang::get('messages.we_are_very_sorry')], 403);
     }
 
     public function refresh()

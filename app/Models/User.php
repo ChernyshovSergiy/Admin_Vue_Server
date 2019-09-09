@@ -40,11 +40,11 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'api_token'
     ];
 
     protected $hidden = [
-        'password', 'remember_token', 'api_token'
+        'password', 'remember_token'
     ];
 
     public static function generatePassword($length = 32)

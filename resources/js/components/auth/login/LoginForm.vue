@@ -65,7 +65,8 @@ export default {
 
         form: {
             email: null,
-            password: null
+            password: null,
+            cLang: this.$i18n.locale
         }
     }),
 

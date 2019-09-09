@@ -12,7 +12,7 @@ use app\Http\Controllers\api\Admin\LanguageController;
 */
 Route::prefix('v1')->group(function () {
     // Admin
-    Route::group(['middleware' => ['guest:api']], function() {
+    Route::group(['middleware' => ['guest:api', 'cLang', 'throttle:5,10']], function() {
         Route::post('login', 'Auth\LoginController@login');
         Route::post('login/refresh', 'Auth\LoginController@refresh');
 

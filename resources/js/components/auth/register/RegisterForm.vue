@@ -85,7 +85,8 @@ export default {
             name: null,
             email: null,
             password: null,
-            password_confirmation: null
+            password_confirmation: null,
+            cLang: this.$i18n.locale
         }
     }),
 
